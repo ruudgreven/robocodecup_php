@@ -19,6 +19,11 @@
   <component name="FavoritesManager">
     <favorites_list name="website" />
   </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" />
   <component name="JsBuildToolPackageJson" detection-done="true" />
   <component name="JsGulpfileManager">
@@ -171,12 +176,12 @@
       <created>1455985218469</created>
       <option name="number" value="Default" />
       <updated>1455985218469</updated>
-      <workItem from="1455985221239" duration="68000" />
+      <workItem from="1455985221239" duration="122000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68000" />
+    <option name="totallyTimeSpent" value="122000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="260" y="85" width="1400" height="1000" extended-state="0" />
