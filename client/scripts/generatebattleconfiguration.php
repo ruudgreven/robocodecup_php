@@ -49,6 +49,9 @@ if ($hFileHandle = opendir($sFolder)) {
                     $oTeamProperties = getTeamProperties($sFolder . "/" . $sFilename);
                     $oTeamProperties->id = $sTeamId;
                     $oTeamProperties->filename = $sFilename;
+                    if ($sPoolId != null) {
+                        $oTeamProperties->pool = $sPoolId;
+                    }
 
                     array_push($aTeams, $oTeamProperties);
                 } catch (Exception $e) {
@@ -84,6 +87,7 @@ if ($hFileHandle = opendir($sFolder)) {
     echo("Writing output file '" . $sOutputfile . "' ...");
     //Form output file
     $oOutput = (object) [
+        'folder' => realpath($sFolder),
         'pools' => $aPools,
         'teams' => $aTeams,
         'ignoredfiles' => $aIgnoredFiles
@@ -98,7 +102,7 @@ if ($hFileHandle = opendir($sFolder)) {
     exit();
 
 } else {
-    echo("Directory '" . $sFolder . "' not found.\n");
+    echo("Error: Directory '" . $sFolder . "' not found.\n");
     exit();
 }
 
