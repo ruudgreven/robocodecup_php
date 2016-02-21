@@ -23,6 +23,9 @@
 ## File-based project format:
 *.iws
 
+# Config file
+config.inc.php
+
 # Tmp files and folder
 tmp
 .DS_Store
