@@ -63,6 +63,7 @@ if ($hFileHandle = opendir($sFolder)) {
             } else {
                 $oIgnoredFile = (object)[
                     'filename' => $sFilename,
+                    'reason' => "The filename does not contain a valid team id"
                 ];
                 array_push($aIgnoredFiles, $oIgnoredFile);
             }
@@ -71,6 +72,7 @@ if ($hFileHandle = opendir($sFolder)) {
             if ($sFilename != "." && $sFilename != "..") {
                 $oIgnoredFile = (object)[
                     'filename' => $sFilename,
+                    'reason' => "The filename does not match the TEAM_REGEXP"
                 ];
                 array_push($aIgnoredFiles, $oIgnoredFile);
             }
@@ -190,7 +192,7 @@ function getTeamProperties($sFilename) {
                 if (count($aRobots) != TEAM_NUMBER_OF_BOTS) {
                     throw new Exception('The team description file should have exactly 4 robots, there are ' . count($aRobots));
                 }
-            } else if (strpos($sLine, "team.authorname") !== FALSE) {               //Read team.authorname and put it to the authorname field
+            } else if (strpos($sLine, "team.author.name") !== FALSE) {               //Read team.authorname and put it to the authorname field
                 $sAuthorName = trim(substr($sLine, strpos($sLine, "=") + 1));
             } else if (strpos($sLine, "team.description") !== FALSE) {              //Read team.authorname and put it to the authorname field
                 $sDescription = trim(substr($sLine, strpos($sLine, "=") + 1));
