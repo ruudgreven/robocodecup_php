@@ -10,3 +10,6 @@ config.inc.php
 # Tmp files and folder
 tmp
 .DS_Store
+
+# Bittorrent sync file
+.bts
