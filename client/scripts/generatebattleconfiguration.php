@@ -153,6 +153,7 @@ function getTeamProperties($sFilename) {
         if (count($aTeamFiles) != 1) {
             throw new Exception('There should be exactly one teamfile in the jarfile, this teamfile has ' . count($aTeamFiles));
         }
+
         if (count($aClassFiles) == 0) {
             throw new Exception('No classfiles where found');
         }
@@ -214,7 +215,8 @@ function getTeamProperties($sFilename) {
         $oOutput = (object) [
             'authorname' => $sAuthorName,
             'description' => $sDescription,
-            'packages' => $aPackages
+            'packages' => $aPackages,
+            'teamfile' => $aTeamFiles[0]['name']
         ];
         return $oOutput;
     } else {
