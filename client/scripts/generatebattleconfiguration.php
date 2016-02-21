@@ -25,7 +25,7 @@ if ($hFileHandle = opendir($sFolder)) {
 	while (false !== ($sFilename = readdir($hFileHandle))) {
 
 	    //Check if the filename matches the regular expression for teamfiles
-	    if (preg_match(REGEXP_TEAMFILE, $sFilename, $aMatches)) {
+	    if (preg_match(TEAM_REGEXP, $sFilename, $aMatches)) {
 
             //Create a new pool when there is no pool with the given id
 	        if (array_key_exists("pool_id", $aMatches)) {
@@ -187,7 +187,7 @@ function getTeamProperties($sFilename) {
         foreach ($aLines as $sLine) {
             if (strpos($sLine, "team.members") !== FALSE) {                         //Check if team.members is a line with 4 bots comma separated;
                 $aRobots = explode(",", $sLine);
-                if (count($aRobots) != NUMBER_OF_BOTS) {
+                if (count($aRobots) != TEAM_NUMBER_OF_BOTS) {
                     throw new Exception('The team description file should have exactly 4 robots, there are ' . count($aRobots));
                 }
             } else if (strpos($sLine, "team.authorname") !== FALSE) {               //Read team.authorname and put it to the authorname field
