@@ -1,0 +1,15 @@
+<?php
+	//The path to robocode
+	define('ROBOCODE_PATH', '/Users/ruud/robocode/');
+
+	//The robocode version, that team needs to configure, use UNDEFINED for all version
+	define('ROBOCODE_VERSION', '1.9.2.5');
+
+	//Use a regular expression with named tags for pool_id and team_id. When you don't want to
+	//use pools, remove the pool_id tag.
+	define('TEAM_REGEXP', '/.+(?P<pool_id>[E|D])HI1VS(?P<team_id>\w+_\d+)_.+\.jar/');
+
+	//The number of bots in a team
+	define('TEAM_NUMBER_OF_BOTS', 4);
+
+?>
