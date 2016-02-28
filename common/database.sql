@@ -27,6 +27,7 @@ CREATE TABLE team (
   competition_id INT,
   secretkey VARCHAR(6),
   name VARCHAR(64),
+  authorname VARCHAR(64),
   description VARCHAR(255),
   PRIMARY KEY (id, competition_id),
   FOREIGN KEY (competition_id) REFERENCES competition(id)

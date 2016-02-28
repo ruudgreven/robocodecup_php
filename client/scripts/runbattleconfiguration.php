@@ -157,7 +157,7 @@ foreach ($aPoolBattles as $sPoolname => $aPoolBattle) {
 
 
 
-//Ask confirmation for battles
+//Ask confirmation if the correct files are generated
 $bProceed = false;
 while (!$bProceed) {
     echo("\nAre you sure all battlefiles are created and you want to run them? [y/n]\n");

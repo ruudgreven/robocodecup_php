@@ -8,6 +8,8 @@ class TeamJarFile {
     private $aPackages;
 
     private $sTeamFile;
+    private $sTeamName;
+
     private $sAuthorName;
     private $sDescription;
 
@@ -51,6 +53,7 @@ class TeamJarFile {
                 throw new Exception('There should be exactly one teamfile in the jarfile, this teamfile has ' . count($aTeamFiles));
             }
             $this->sTeamFile = $aTeamFiles[0]['name'];
+            $this->sTeamName = substr($this->sTeamFile, strrpos($this->sTeamFile, "/") + 1, -5);
 
             if (count($this->aClassFiles) == 0) {
                 throw new Exception('No classfiles where found');
@@ -133,6 +136,10 @@ class TeamJarFile {
 
     public function getTeamFile() {
         return $this->sTeamFile;
+    }
+
+    public function getTeamName() {
+        return $this->sTeamName;
     }
 
     public function getAuthorName() {

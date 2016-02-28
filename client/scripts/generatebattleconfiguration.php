@@ -69,6 +69,7 @@ if ($hFileHandle = opendir($sFolder)) {
                         $oTeam->pool = $sPoolId;
                     }
                     $oTeam->teamfile = $oTeamJarFile->getTeamFile();
+                    $oTeam->teamname = $oTeamJarFile->getTeamName();
                     $oTeam->authorname = $oTeamJarFile->getAuthorName();
                     $oTeam->description = $oTeamJarFile->getDescription();
                     $oTeam->packages = $oTeamJarFile->getPackages();
