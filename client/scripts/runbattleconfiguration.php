@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__) . '/../config.inc.php');
+include_once(dirname(__FILE__) . '/../../common/config.inc.php');
 /**
  * Runs a battle configuration file
  */
@@ -196,9 +196,9 @@ if ($hFileHandle = opendir($sOutputFolder . "/battles")) {
 
 /**
  * Generate a battle file
- * sTemplate, the template file
- * sFilename, the output filename
- * saBots, the bots that needs to battle against each other. Array with full names: <package>.<robotname> , e.g.: sample.Walls
+ * sTemplate the template file
+ * sFilename the output filename
+ * $sTeams the teams in the battle
  */
 function generateBattleFile($sTemplate, $sFilename, $aTeams) {
     $fFile = fopen($sFilename, "w") or die("Unable to open file!");
