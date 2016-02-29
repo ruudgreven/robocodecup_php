@@ -57,21 +57,23 @@ function addTeamsFromBattleConfiguration($sFilename, $bUpdate = true) {
     //Loop through all teams
     foreach ($oJson->teams as $oTeam) {
         if (!$bUpdate) {
-            $sQuery = "INSERT INTO team (id, competition_id, name, authorname, description) VALUES (" .
+            $sQuery = "INSERT INTO team (id, competition_id, fullname, name, authorname, description) VALUES (" .
                 "'" . $oTeam->id . "'," .
                 "'" . COMPETITION_ID . "'," .
+                "'" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "'," .
                 "'" . $oTeam->teamname . "'," .
                 "'" . $oTeam->authorname . "'," .
                 "'" . $oTeam->description ."'" .
                 ");";
         } else {
-            $sQuery = "INSERT INTO team (id, competition_id, name, authorname, description) VALUES (" .
+            $sQuery = "INSERT INTO team (id, competition_id, fullname, name, authorname, description) VALUES (" .
                 "'" . $oTeam->id . "'," .
                 "'" . COMPETITION_ID . "'," .
+                "'" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "'," .
                 "'" . $oTeam->teamname . "'," .
                 "'" . $oTeam->authorname . "'," .
                 "'" . $oTeam->description ."'" .
-                ") ON DUPLICATE KEY UPDATE name = '" . $oTeam->teamname . "', authorname = '" . $oTeam->authorname . "', description = '" . $oTeam->description . "';";
+                ") ON DUPLICATE KEY UPDATE fullname = '" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "', name = '" . $oTeam->teamname . "', authorname = '" . $oTeam->authorname . "', description = '" . $oTeam->description . "';";
         }
 
         $oResult = $oDbHelper->executeQuery($sQuery);

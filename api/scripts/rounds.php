@@ -31,7 +31,7 @@ try {
         echo("      Valid commands: list, add\n");
         echo("Usage:    " . $argv[0] . " add <period> <number_of_days_per_round> <startdate>\n");
         echo("Example:  " . $argv[0] . " add 3-8 7 07-03-2016");
-        echo("          Added rounds 3 to 8, one rounds takes 7 days (a week) and the rounds started on day 07-03-2016");
+        echo("          Added rounds 3 to 8, one rounds takes 7 days (a week) and the rounds started on day 07-03-2016\n");
     }
 } catch (Exception $e) {
     $oDbHelper->printError($e->getMessage() ."\n");
@@ -76,7 +76,7 @@ function addRound($sPeriod, $sDays, $sDate) {
 
     if ($sInput == "y" || $sInput == "Y") {
         echo "\n    Adding rounds...";
-        for ($i = $iBeginRound; $i <= $iNumRounds; $i++) {
+        for ($i = $iBeginRound; $i < $iBeginRound + $iNumRounds; $i++) {
             //Create enddate
             $dEndDate = clone $dStartDate;
             $dEndDate->add(new DateInterval('P' . ($iNumberOfDays - 1) . 'D'));
@@ -90,7 +90,7 @@ function addRound($sPeriod, $sDays, $sDate) {
         echo "OK!\n";
         echo "Printing added rounds:\n";
 
-        $sQuery = "SELECT * FROM round WHERE competition_id = " . COMPETITION_ID . " AND number > " . $iBeginRound . " AND number <= " . ($iBeginRound + $iNumRounds) . ";";
+        $sQuery = "SELECT * FROM round WHERE competition_id = " . COMPETITION_ID . " AND number >= " . $iBeginRound . " AND number < " . ($iBeginRound + $iNumRounds) . ";";
         $oResult = $oDbHelper->executeQuery($sQuery);
         $oDbHelper->printDbResult($oResult);
     } else {

@@ -26,6 +26,7 @@ CREATE TABLE team (
   id VARCHAR(16) NOT NULL,
   competition_id INT,
   secretkey VARCHAR(6),
+  fullname VARCHAR(128),
   name VARCHAR(64),
   authorname VARCHAR(64),
   description VARCHAR(255),
@@ -69,16 +70,18 @@ CREATE TABLE battle (
   datetime DATETIME,
   official BOOL,
   PRIMARY KEY (id),
+  UNIQUE (competition_id, datetime),
   FOREIGN KEY (competition_id) REFERENCES competition(id),
   FOREIGN KEY (competition_id, pool_id) REFERENCES pool(competition_id, id),
   FOREIGN KEY (competition_id, round_number) REFERENCES round(competition_id, number)
 );
 
-CREATE TABLE battlescores (
+CREATE TABLE battlescore (
   competition_id INT NOT NULL,
   pool_id VARCHAR(16) NOT NULL,
   battle_id INT NOT NULL,
   team_id VARCHAR(16) NOT NULL,
+  rank INT,
   totalscore INT,
   totalpercentage INT,
   survivalscore INT,
