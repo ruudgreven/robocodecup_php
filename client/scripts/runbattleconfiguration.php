@@ -146,7 +146,7 @@ foreach ($aPoolBattles as $sPoolname => $aPoolBattle) {
 
         //Configure filenames
         $sTemplateFilenameStart = "../" . TEMPLATE_FOLDER . "/";
-        $sFilenameStart = $sOutputFolder . "/battles/" . $sPoolname . "_" . $oBattle->team1_id . "-" . $oBattle->team2_id . "_";
+        $sFilenameStart = $sOutputFolder . "/battles/" . $sPoolname . "_" . $oBattle->team1_id . "-" . $oBattle->team2_id;
         $aTeams = [$oBattle->team1_teamfile, $oBattle->team2_teamfile];
 
         //Build battle files based upon the templates
@@ -174,6 +174,9 @@ while (!$bProceed) {
 
 
 //****** Run the generated battlefiles ******
+$iNumberOfBattlesRunned = 0;
+echo "Running the battles (This may take some time. Capturing output to file)...";
+ob_start();
 
 //Create a folder to place the battles
 mkdir($sOutputFolder . "/output");
@@ -183,6 +186,7 @@ if ($hFileHandle = opendir($sOutputFolder . "/battles")) {
         if ($sFilename != "." && $sFilename != "..") {
             if (strrpos($sFilename, ".battle")) {
                 if (strpos($sFilename, "_tenrounds")) {
+                    $iNumberOfBattlesRunned++;
                     runBattle($sOutputFolder . "/teams", $sOutputFolder . "/battles", $sFilename, $sOutputFolder . "/output");
                 }
             }
@@ -190,6 +194,35 @@ if ($hFileHandle = opendir($sOutputFolder . "/battles")) {
     }
     closedir($hFileHandle);
     echo "DONE!\n";
+}
+$sOutputString = ob_get_contents();
+ob_end_clean();
+echo "OK!\n";
+file_put_contents($sOutputFolder . "/log.txt", $sOutputString);
+
+
+
+//****** Copy battle configuration file to outputfolder ******
+copy($sBattleconfigurationFilename, $sOutputFolder . "/battleconfiguration.json");
+
+
+
+//****** Check number of output files ******
+echo "Checking number of outputfiles...";
+$iCountedBattleFiles = 0;
+if ($hFileHandle = opendir($sOutputFolder . "/output")) {
+    while (false !== ($sFilename = readdir($hFileHandle))) {
+        if ($sFilename!="." && $sFilename!="..") {
+            $iCountedBattleFiles++;
+        }
+    }
+}
+
+// The number of outputfiles should be 2 x $iNumberOfBattlesRunned
+if ($iCountedBattleFiles != $iNumberOfBattlesRunned * 2) {
+    echo "ERROR! (Expected: " . ($iNumberOfBattlesRunned * 2) . ", Found: "  . $iCountedBattleFiles . ") , Please check log.txt in " . $sOutputFolder . "\n";
+} else {
+    echo "OK!\n";
 }
 
 
