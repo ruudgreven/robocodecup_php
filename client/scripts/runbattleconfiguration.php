@@ -91,6 +91,7 @@ foreach ($aPools as $sPoolname => $aPool) {
                 //Read the teamfile of the other team and create the correct format (with dots and without .team)
                 $sTeamfile2 = str_replace("/", ".", $oTeam2->teamfile);
                 $sTeamfile2 = substr($sTeamfile2, 0, -5);
+                $sFilenameStart = $sPoolname . "_" . $oTeam->id . "-" . $oTeam2->id;
 
                 //Create a battle
                 $oBattle = (object) [
@@ -98,6 +99,10 @@ foreach ($aPools as $sPoolname => $aPool) {
                     'team1_id' => $oTeam->id,
                     'team2_teamfile' => $sTeamfile2,
                     'team2_id' => $oTeam2->id,
+                    'filename_battle_singleround' => "battles/" . $sFilenameStart . "_singleround.battle",
+                    'filename_battle_tenrounds' => "battles/" . $sFilenameStart . "_tenrounds.battle",
+                    'filename_results_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.results",
+                    'filename_replay_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.br",
                 ];
 
                 //Add the battle
@@ -132,6 +137,14 @@ while (!$bProceed) {
     }
 }
 
+//****** Write battles to json file for later reference ******
+echo("Writing json file 'runnedbattles.json' ...");
+
+//Write to file
+$pFile = fopen($sOutputFolder . "/runnedbattles.json", 'w');
+fwrite($pFile, json_encode($aPoolBattles, JSON_PRETTY_PRINT) . "\n");
+fclose($pFile);
+echo("OK!\n");
 
 
 //****** Generating the battles ******
@@ -146,12 +159,11 @@ foreach ($aPoolBattles as $sPoolname => $aPoolBattle) {
 
         //Configure filenames
         $sTemplateFilenameStart = "../" . TEMPLATE_FOLDER . "/";
-        $sFilenameStart = $sOutputFolder . "/battles/" . $sPoolname . "_" . $oBattle->team1_id . "-" . $oBattle->team2_id;
         $aTeams = [$oBattle->team1_teamfile, $oBattle->team2_teamfile];
 
         //Build battle files based upon the templates
-        generateBattleFile($sTemplateFilenameStart . "singleround.battle", $sFilenameStart . "_singleround.battle", $aTeams);
-        generateBattleFile($sTemplateFilenameStart . "tenrounds.battle", $sFilenameStart . "_tenrounds.battle", $aTeams);
+        generateBattleFile($sTemplateFilenameStart . "singleround.battle", $sOutputFolder . "/" . $oBattle->filename_battle_singleround, $aTeams);
+        generateBattleFile($sTemplateFilenameStart . "tenrounds.battle", $sOutputFolder . "/" . $oBattle->filename_battle_tenrounds, $aTeams);
     }
 }
 
