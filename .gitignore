@@ -13,3 +13,6 @@ tmp
 
 # Bittorrent sync file
 .bts
+
+# Htaccess files
+.htaccess
