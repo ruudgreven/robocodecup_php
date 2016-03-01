@@ -14,14 +14,17 @@ angular.module('robocodecupApp')
     $scope.selectedIndex = -1;
     $scope.selectedRound = undefined;
 
+    //Add home tab
+    $scope.tabs.push({title: 'Home / Totals'});
+
     //Get the rounds from the api
     $http({
       method : 'GET',
       url : 'http://localhost/robocodecupapi/api/round.json'
     }).then(function mySucces(response) {
-      $scope.rounds = response.data.response[0].rounds;
+      $scope.rounds = response.data.response.rounds;
 
-      var currentRound = response.data.response[0].current;
+      var currentRound = response.data.response.current;
 
       var counter = 0;
       $scope.rounds.forEach(function(round) {
@@ -37,8 +40,13 @@ angular.module('robocodecupApp')
 
     $scope.$watch('selectedIndex', function(current, old) {
       if (current !== -1) {
-        $scope.selectedRound = $scope.rounds[current];
-        $location.url('round/' + $scope.selectedRound.number);
+        if (current === 0) {
+          $location.url('home');
+        } else {
+          $scope.selectedRound = $scope.rounds[current - 1];
+          $location.url('round/' + $scope.selectedRound.number);
+        }
+
       }
     });
 

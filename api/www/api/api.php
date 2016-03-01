@@ -24,7 +24,7 @@ Flight::route('GET /competition.json', function(){
 Flight::route('GET /pool.json', function(){
     global $oDbHelper;
 
-    $sQuery = "SELECT team.id, pool.id AS pool_id, pool.name AS pool_name, team.fullname, team.name, team.authorname, team.description FROM pool, team, poolteams WHERE pool.competition_id = team.competition_id = poolteams.competition_id = " . COMPETITION_ID . " AND pool.id = poolteams.pool_id AND team.id = poolteams.team_id;";
+    $sQuery = "SELECT team.id, pool.id AS pool_id, pool.name AS pool_name, pool.description AS pool_description, team.fullname, team.name, team.authorname, team.description FROM pool, team, poolteams WHERE pool.competition_id = team.competition_id = poolteams.competition_id = " . COMPETITION_ID . " AND pool.id = poolteams.pool_id AND team.id = poolteams.team_id;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Cluster by pool id
@@ -35,6 +35,7 @@ Flight::route('GET /pool.json', function(){
             $aPools[$sPoolId] = (object)[
                 'id' => $sPoolId,
                 'name' => $aObject['pool_name'],
+                'description' => $aObject['pool_description'],
                 'teams' => array()
             ];
         }
@@ -42,7 +43,7 @@ Flight::route('GET /pool.json', function(){
     }
 
     //Return
-    $oDbHelper->outputArray($aPools);
+    $oDbHelper->outputArray(array_values($aPools));
 });
 
 

@@ -44,7 +44,7 @@ class DBHelper {
             } else {
                 $bFirst = false;
             }
-            $sJson .= json_encode($aObject);
+            $sJson .= json_encode($aObject, JSON_NUMERIC_CHECK);
         }
         $sJson .= "]}";
 
@@ -62,10 +62,10 @@ class DBHelper {
         header('Content-Disposition: attachment; filename=' . $sFilename . '.json');
         header("HTTP/1.1 200 OK");
 
-        $sJson = "{\"status\": \"ok\", \"response\": [";
+        $sJson = "{\"status\": \"ok\", \"response\": ";
         $bFirst = true;
-        $sJson .= json_encode($aList);
-        $sJson .= "]}";
+        $sJson .= json_encode($aList, JSON_NUMERIC_CHECK);
+        $sJson .= "}";
 
         //Print the json
         echo($sJson);

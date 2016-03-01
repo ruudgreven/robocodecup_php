@@ -34,20 +34,23 @@ Get  all pools from the current competition with their associated teams.
                 "id": "E",
                 "teams": [
                     {
-                        "fullname": "ruudsteam.RuudsTeam",
+                        "fullname": "pgr.team.EP_BaseTeam",
                         "pool_name": "Enschede",
-                        "authorname": "Ruud Greven",
+                        "authorname": "",
                         "pool_id": "E",
-                        "name": "RuudsTeam",
-                        "id": "EHI1VSx_3",
-                        "description": "Ruud roeleert!"
+                        "name": "EP_BaseTeam",
+                        "id": "EHI1VSx_1",
+                        "pool_description": "Alle klassen uit Enschede",
+                        "description": "Pauls team, jaja."
                     },
                     ...
-                ]
+                ],
+                "description": "Alle klassen uit Enschede"
             }
         }
     ]
 }
+
 
 ```
 

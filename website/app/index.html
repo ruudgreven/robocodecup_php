@@ -18,25 +18,61 @@
   </head>
   <body ng-app="robocodecupApp" layout="column">
 
-  <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
-
+  <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2" ng-cloak>
     <md-toolbar layout="row" class="md-whiteframe-z1">
       <h3>Name of the site</h3>
     </md-toolbar>
 
-    <md-content flex id="content">
-      <div ng-controller="RoundCtrl">
-        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
-          <md-tab ng-repeat="tab in tabs"
-                  ng-disabled="tab.disabled"
-                  label="{{tab.title}}">
-            <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-              <div ng-view=""></div>
-            </div>
-          </md-tab>
-        </md-tabs>
-      </div>
-    </md-content>
+    <section layout="row" flex>
+      <md-sidenav class="md-whiteframe-z2 md-padding" md-component-id="left" md-is-locked-open="true">
+        <div  ng-controller="PoolCtrl">
+          <!-- Section for the pools -->
+          <secion>
+            <md-subheader class="md-primary">Pools</md-subheader>
+            <md-list layout-padding>
+              <md-list-item ng-repeat="pool in pools" class="md-2-line">
+                <img ng-src="d" class="md-avatar" alt="None" />
+                <div class="md-list-item-text">
+                  <h3>{{pool.name}}</h3>
+                  <p>{{pool.description}}</p>
+                  <md-checkbox class="md-secondary" ng-model="pool.selected" ng-click="updateTeams()"></md-checkbox>
+                </div>
+              </md-list-item>
+            </md-list>
+          </secion>
+
+          <!-- Section for the teams -->
+          <secion>
+            <md-subheader class="md-primary">Teams</md-subheader>
+            <md-list layout-padding>
+              <md-list-item ng-repeat="team in teams" class="md-2-line">
+                <img ng-src="d" class="md-avatar" alt="None" />
+                <div class="md-list-item-text">
+                  <h3>{{team.name}}</h3>
+                  <p>{{team.description}}</p>
+                </div>
+              </md-list-item>
+            </md-list>
+          </secion>
+        </div>
+      </md-sidenav>
+
+      <md-content flex id="content">
+        <div ng-controller="RoundCtrl">
+          <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
+            <md-tab ng-repeat="tab in tabs"
+                    ng-disabled="tab.disabled"
+                    label="{{tab.title}}">
+              <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+                <div ng-view=""></div>
+              </div>
+            </md-tab>
+          </md-tabs>
+        </div>
+      </md-content>
+    </section>
+
+
   </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -71,6 +107,8 @@
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/round.js"></script>
         <script src="scripts/controllers/rounddetails.js"></script>
+        <script src="scripts/controllers/pool.js"></script>
+        <script src="scripts/controllers/team.js"></script>
         <!-- endbuild -->
 </body>
 </html>
