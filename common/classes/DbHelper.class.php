@@ -53,10 +53,29 @@ class DBHelper {
     }
 
     /**
+     * Outputs a given array
+     * @param $oResult The database result
+     * @param string $sFilename The filename for the downloaded response file
+     */
+    function outputArray($aList, $sFilename = "response") {
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $sFilename . '.json');
+        header("HTTP/1.1 200 OK");
+
+        $sJson = "{\"status\": \"ok\", \"response\": [";
+        $bFirst = true;
+        $sJson .= json_encode($aList);
+        $sJson .= "]}";
+
+        //Print the json
+        echo($sJson);
+    }
+
+    /**
      * Outputs an error message, with statuscode 500 and json describing the error
      * @param $sMessage The error message
      */
-    function outputError($sMessage) {
+    function outputError($sMessage, $sFilename = "error") {
         header('Content-Type: application/json; charset=utf-8');
         header('Content-Disposition: attachment; filename=' . $sFilename . '.json');
         header('HTTP/1.1 500 Internal Server Error');
