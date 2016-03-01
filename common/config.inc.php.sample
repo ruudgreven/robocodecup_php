@@ -33,7 +33,8 @@
 
 	//Use a regular expression with named tags for pool_id and team_id. When you don't want to
 	//use pools, remove the pool_id tag.
-	define('TEAM_REGEXP', '/.+(?P<pool_id>[E|D])HI1VS(?P<team_id>\w+_\d+)_.+\.jar$/');
+	//define('TEAM_REGEXP', '/.+(?P<pool_id>[E|D])HI1VS(?P<team_id>\w+_\d+)_.+\.jar$/');
+	define('TEAM_REGEXP', '/.+(?P<team_id>(?P<pool_id>[E|D])HI1VS\w+_\d+)_.+\.jar$/');
 
 	//The number of bots in a team
 	define('TEAM_NUMBER_OF_BOTS', 4);

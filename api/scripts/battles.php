@@ -38,6 +38,7 @@ try {
     }
 } catch (Exception $e) {
     $oDbHelper->printError($e->getMessage() ."\n");
+    die();
 }
 
 /**
@@ -60,13 +61,15 @@ function addBattles($sFolder, $bOfficial, $iRound) {
     $sContents = utf8_encode($sContents);
     $oJson = json_decode($sContents);
     if ($oJson == null) {
-        echo("ERROR: The JSON file '" . $sRunnedBattles . "' seems not valid");
+        echo("\nERROR: The JSON file '" . $sRunnedBattles . "' seems not valid");
         exit();
     }
 
     //Loop through all the battles in the json file
+    echo "Loop through battles in the battleconfiguration...\n";
     $dTimeZone = new DateTimeZone(TIMEZONE);
     foreach ($oJson as $sPoolname => $aBattles) {
+        echo "  Pool '" . $sPoolname . "'...\n";
         foreach($aBattles as $oBattle) {
             $sResultsFilename = $sFolder . "/" . $oBattle->filename_results_tenrounds;
             if (file_exists($sResultsFilename)) {
@@ -77,10 +80,18 @@ function addBattles($sFolder, $bOfficial, $iRound) {
                 $sRunDateTime = $dRunDateTime->format('Y-m-d H:i:s');
 
                 //Create battle
+                echo "    Adding battle to battle table...";
                 $sQuery = "INSERT INTO battle (competition_id, pool_id, round_number, datetime, official) VALUES (" . COMPETITION_ID . ", '" . $sPoolname . "', '" . $iRound . "', '" . $sRunDateTime . "', " . ($bOfficial?1:0) . ")";
-                $oResult = $oDbHelper->executeQuery($sQuery);
-                $iBattleId = $oDbHelper->getMysqli()->insert_id;
 
+                try {
+                    $oResult = $oDbHelper->executeQuery($sQuery);
+                    $iBattleId = $oDbHelper->getMysqli()->insert_id;
+                } catch (Exception $e) {
+                    $oDbHelper->printError($e->getMessage() ."\n", $sQuery);
+                    die();
+                }
+
+                echo "OK!\n";
                 //Read result file and add scores
                 parseFile($sPoolname, $iRound, $iBattleId, $sResultsFilename);
 
@@ -88,7 +99,9 @@ function addBattles($sFolder, $bOfficial, $iRound) {
                 throw new Exception("The filename '" . $sResultsFilename . "' cannot be found, but is mentioned in runnedbattles.json");
             }
         }
+        echo "OK!\n";
     }
+    echo "OK!\n";
 }
 
 
@@ -98,7 +111,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
 function parseFile($sPoolId, $iRound, $iBattleId, $sFilename) {
     global $oDbHelper;
 
-    echo "  Parsing " . $sFilename . "...\n";
+    echo "    Parsing " . $sFilename . "...\n";
     $fTemplate = fopen($sFilename, "r");
     $sContents = fread($fTemplate, filesize($sFilename));
     fclose($fTemplate);
@@ -116,7 +129,7 @@ function parseFile($sPoolId, $iRound, $iBattleId, $sFilename) {
         //Read robotname
         $sTeamName = trim(substr($sPart1, strpos($sPart1, " ")));
         if ($sTeamName != "") {
-            echo "    Reading robot score...";
+            echo "      Reading robot score...";
             //Read total score
             $sTotalAll = trim($aResults[$aPos+1]);
             $iTotal = trim(substr($sTotalAll, 0, strpos($sTotalAll, "(")));
@@ -166,5 +179,6 @@ function parseFile($sPoolId, $iRound, $iBattleId, $sFilename) {
             echo "OK!\n";
         }
     }
+    echo "    OK!\n";
 }
 ?>

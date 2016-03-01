@@ -88,8 +88,11 @@ class DBHelper {
      * Prints an error message
      * @param $sMessage The error message
      */
-    function printError($sMessage) {
-        echo("ERROR: " . $sMessage);
+    function printError($sMessage, $sQuery = "") {
+        echo("\nERROR: " . $sMessage);
+        if ($sQuery!="") {
+            echo "\n  In query: " . $sQuery . "\n";
+        }
     }
 }
 ?>
