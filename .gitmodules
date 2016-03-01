@@ -1,0 +1,3 @@
+[submodule "common/inc/flight"]
+	path = common/inc/flight
+	url = https://github.com/mikecao/flight.git
