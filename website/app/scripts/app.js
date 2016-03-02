@@ -22,12 +22,11 @@ angular
   ])
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('default')
-      .primaryPalette('orange')
-      .accentPalette('pink');
+      .primaryPalette('blue')
+      .accentPalette('orange');
     $mdThemingProvider.theme('sidebar')
-      .primaryPalette('indigo')
-      .accentPalette('pink')
-      .backgroundPalette('indigo');
+      .primaryPalette('blue')
+      .accentPalette('pink');
     $mdThemingProvider.theme('top')
       .primaryPalette('deep-purple');
   })

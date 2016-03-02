@@ -9,16 +9,15 @@
  */
 angular.module('robocodecupApp')
   .controller('PoolCtrl', function ($scope, $http, $log, config, filter) {
-    var pools;
+    $scope.enabled = true;
     $scope.pools = [];
-    $scope.teams = [];
 
     //Get the pools from the api
     $http({
       method : 'GET',
       url : config.api + '/pool.json'
     }).then(function mySucces(response) {
-      pools = response.data.response;
+      var pools = response.data.response;
 
       //Walk through pools
       pools.forEach(function(pool) {
@@ -27,19 +26,14 @@ angular.module('robocodecupApp')
       $scope.updateTeams();
     });
 
-
     $scope.updateTeams = function() {
       //Create filterpools
       var filterpools = [];
 
-      //Walk through all pools and build team list
-      $scope.teams = [];
+      //Walk through all pools
       $scope.pools.forEach(function(pool) {
         if (pool.selected) {
           filterpools.push(pool.id);
-          pool.teams.forEach(function(team) {
-            $scope.teams.push(team);
-          });
         }
       });
 
@@ -47,7 +41,10 @@ angular.module('robocodecupApp')
       filter.setFilterPools(filterpools);
     };
 
-    $scope.setTeam = function(team) {
-      filter.setFilterTeam(team.id);
-    };
+    //Watch filterpool for changes
+    $scope.$watch(function(){
+      return filter.filteringenabled;
+    }, function(current, old) {
+      $log.log('Filtering changed to ' + current);
+    });
   });

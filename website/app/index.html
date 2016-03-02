@@ -40,22 +40,6 @@
               </md-list-item>
             </md-list>
           </secion>
-
-          <!-- Section for the teams -->
-          <secion>
-            <md-subheader class="md-primary">Teams</md-subheader>
-            <md-list layout-padding>
-              <md-list-item ng-repeat="team in teams" ng-click="setTeam(team)" class="md-2-line">
-                <md-button class="md-fab md-mini md-primary" aria-label="Team logo">
-                  {{team.name.charAt(0).toUpperCase()}}
-                </md-button>
-                <div class="md-list-item-text">
-                  <h3>{{team.name}}</h3>
-                  <p>{{team.description}}</p>
-                </div>
-              </md-list-item>
-            </md-list>
-          </secion>
         </div>
       </md-sidenav>
 

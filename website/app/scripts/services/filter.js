@@ -10,47 +10,40 @@
 angular.module('robocodecupApp')
   .service('filter', function ($log) {
     var filteroptions = {};
+    var filteringenabled = false;
 
-    filteroptions.filterteam = '';
     filteroptions.filterpools = {};
-
-    filteroptions.setFilterTeam = function(value) {
-      if (filteroptions.filterteam == value) {
-        filteroptions.filterteam = '';
-      } else {
-        filteroptions.filterteam = value;
-      }
-    };
 
     filteroptions.setFilterPools = function(pools) {
       filteroptions.filterpools = pools;
-      filteroptions.filterteam = '';
     };
 
     filteroptions.doFiltering = function(scores) {
-      $log.log('Do filtering on pools ' + filteroptions.filterpools + ' and team ' + filteroptions.filterteam);
+      $log.log('Do filtering on pools ' + filteroptions.filterpools);
 
       var newscores = [];
+      var count = 1;
       scores.forEach(function(score) {
         if (filteroptions.filterpools.indexOf(score.pool_id) != -1) {
-          if (filteroptions.filterteam !== '') {
-            if (score.id == filteroptions.filterteam) {
-              newscores.push(score);
-            }
-          } else {
-            newscores.push(score);
-          }
+          score.rank = count;
+          newscores.push(score);
+          count++;
         }
       });
+
       return newscores;
     };
 
-    filteroptions.hasFilterTeam = function() {
-      return filteroptions.filterteam !== '';
+    filteroptions.hasFilter = function() {
+      return filteroptions.filterpools.length !== 0;
     };
 
-    filteroptions.hasFilter = function() {
-      return !(filteroptions.filterteam === '' && filteroptions.filterpools.length === 0);
+    filteroptions.disableFiltering = function() {
+      filteroptions.filteringenabled = false;
+    };
+
+    filteroptions.enableFiltering = function() {
+      filteroptions.filteringenabled = false;
     };
 
     return filteroptions;

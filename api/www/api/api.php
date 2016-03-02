@@ -138,8 +138,6 @@ Flight::route('GET /round/@sRoundId/team.json', function($sRoundId){
 });
 
 
-
-
 /**
  * Get all the battles played in this round
  */
@@ -208,6 +206,32 @@ Flight::route('GET /round/@sRoundId/battles.json', function($sRoundId){
 
     //Return
     $oDbHelper->outputArray(array_values($aPools));
+});
+
+
+
+/**
+ * Get the ranking of this round. All scores summed up by team
+ */
+Flight::route('GET /round/@sRoundId/ranking.json', function($sRoundId){
+    global $oDbHelper;
+
+    if (!preg_match('/^[0-9]+$/', $sRoundId)) {
+        $oDbHelper->outputError("The round should be numeric");
+        return;
+    }
+    //Get all rounds
+    $sQuery = "SELECT pool.id AS pool_id, pool.name AS pool_name, team.id as team_id, team.name AS team_name, SUM(battlescore.totalscore) AS totalscore, SUM(battlescore.survivalscore) AS survivalscore, SUM(battlescore.survivalbonus) AS survivalbonus, SUM(battlescore.bulletdamage) AS bulletdamage, SUM(battlescore.bulletbonus) AS bulletbonus, SUM(battlescore.ramdamage) AS ramdamage, SUM(battlescore.rambonus) AS rambonus, SUM(battlescore.firsts) AS firsts, SUM(battlescore.seconds) AS seconds, SUM(battlescore.thirds) AS thirds, COUNT(*) AS totalbattles FROM battle, battlescore, team, pool WHERE battle.competition_id = team.competition_id = battlescore.competition_id = pool.competition_id = " . COMPETITION_ID . " AND battlescore.battle_id = battle.id AND battlescore.team_id = team.id AND battlescore.pool_id = pool.id AND round_number=" . $sRoundId. " AND battle.official = 1 GROUP BY team_id, pool_id ORDER BY SUM(battlescore.totalscore) DESC;";
+    $oResult = $oDbHelper->executeQuery($sQuery);
+
+    //Cluster by pool id
+    $aScores = array();
+    while($aObject = $oResult->fetch_assoc()) {
+        array_push($aScores, $aObject);
+    }
+
+    //Return
+    $oDbHelper->outputArray($aScores);
 });
 
 Flight::start();
