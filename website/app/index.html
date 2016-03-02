@@ -10,6 +10,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="bower_components/angular-material-data-table/dist/md-data-table.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -19,19 +20,18 @@
   <body ng-app="robocodecupApp" layout="column">
 
   <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2" ng-cloak>
-    <md-toolbar layout="row" class="md-whiteframe-z1">
+    <md-toolbar md-theme="top" layout="row" class="md-whiteframe-z1">
       <h3>Name of the site</h3>
     </md-toolbar>
 
     <section layout="row" flex>
-      <md-sidenav class="md-whiteframe-z2 md-padding" md-component-id="left" md-is-locked-open="true">
-        <div  ng-controller="PoolCtrl">
+      <md-sidenav md-theme="sidebar" md-component-id="left" md-is-locked-open="true">
+        <div ng-controller="PoolCtrl">
           <!-- Section for the pools -->
           <secion>
             <md-subheader class="md-primary">Pools</md-subheader>
             <md-list layout-padding>
               <md-list-item ng-repeat="pool in pools" class="md-2-line">
-                <img ng-src="d" class="md-avatar" alt="None" />
                 <div class="md-list-item-text">
                   <h3>{{pool.name}}</h3>
                   <p>{{pool.description}}</p>
@@ -45,8 +45,10 @@
           <secion>
             <md-subheader class="md-primary">Teams</md-subheader>
             <md-list layout-padding>
-              <md-list-item ng-repeat="team in teams" class="md-2-line">
-                <img ng-src="d" class="md-avatar" alt="None" />
+              <md-list-item ng-repeat="team in teams" ng-click="setTeam(team)" class="md-2-line">
+                <md-button class="md-fab md-mini md-primary" aria-label="Team logo">
+                  {{team.name.charAt(0).toUpperCase()}}
+                </md-button>
                 <div class="md-list-item-text">
                   <h3>{{team.name}}</h3>
                   <p>{{team.description}}</p>
@@ -57,9 +59,9 @@
         </div>
       </md-sidenav>
 
-      <md-content flex id="content">
+      <md-content flex id="content" class="md-padding">
         <div ng-controller="RoundCtrl">
-          <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
+          <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-dynamic-height>
             <md-tab ng-repeat="tab in tabs"
                     ng-disabled="tab.disabled"
                     label="{{tab.title}}">
@@ -98,6 +100,7 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -109,6 +112,7 @@
         <script src="scripts/controllers/rounddetails.js"></script>
         <script src="scripts/controllers/pool.js"></script>
         <script src="scripts/controllers/team.js"></script>
+        <script src="scripts/services/filter.js"></script>
         <!-- endbuild -->
 </body>
 </html>

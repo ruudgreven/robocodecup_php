@@ -8,7 +8,7 @@
  * Controller of the robocodecupApp
  */
 angular.module('robocodecupApp')
-  .controller('RoundCtrl', function ($scope, $http, $location, $log) {
+  .controller('RoundCtrl', function ($scope, $http, $location, $log, config) {
     $scope.tabs = [];
     $scope.rounds = [];
     $scope.selectedIndex = -1;
@@ -20,7 +20,7 @@ angular.module('robocodecupApp')
     //Get the rounds from the api
     $http({
       method : 'GET',
-      url : 'http://localhost/robocodecupapi/api/round.json'
+      url : config.api + '/round.json'
     }).then(function mySucces(response) {
       $scope.rounds = response.data.response.rounds;
 
@@ -32,7 +32,7 @@ angular.module('robocodecupApp')
 
         //If there is a round given in the url make that the default
         if (round.number == currentRound) {
-          $scope.selectedIndex = counter;
+          $scope.selectedIndex = counter + 1;
         }
         counter++;
       });

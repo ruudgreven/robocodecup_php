@@ -134,7 +134,7 @@ Flight::route('GET /round/@sRoundId/team.json', function($sRoundId){
     }
 
     //Return
-    $oDbHelper->outputArray($aPools);
+    $oDbHelper->outputArray(array_values($aPools));
 });
 
 
@@ -201,8 +201,13 @@ Flight::route('GET /round/@sRoundId/battles.json', function($sRoundId){
         array_push($aPools[$sPoolId]->battles[$sBattleId]->scores, $oScore);
     }
 
+    //Remove array keys
+    foreach ($aPools as $oPool) {
+        $oPool->battles = array_values($oPool->battles);
+    }
+
     //Return
-    $oDbHelper->outputArray($aPools);
+    $oDbHelper->outputArray(array_values($aPools));
 });
 
 Flight::start();

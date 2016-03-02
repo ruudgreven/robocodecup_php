@@ -17,8 +17,20 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngMaterial'
+    'ngMaterial',
+    'md.data.table'
   ])
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('orange')
+      .accentPalette('pink');
+    $mdThemingProvider.theme('sidebar')
+      .primaryPalette('indigo')
+      .accentPalette('pink')
+      .backgroundPalette('indigo');
+    $mdThemingProvider.theme('top')
+      .primaryPalette('deep-purple');
+  })
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -34,4 +46,6 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  }).constant('config', {
+    api: 'http://localhost/robocodecupapi/api'
   });
