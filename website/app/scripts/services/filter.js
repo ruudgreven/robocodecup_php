@@ -37,7 +37,7 @@ angular.module('robocodecupApp')
             object.rank = counter;
           }
           newobjects.push(object);
-          counter++
+          counter++;
         }
       });
       return newobjects;

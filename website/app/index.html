@@ -20,9 +20,11 @@
   <body ng-app="robocodecupApp" layout="column">
 
   <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2" ng-cloak>
-    <md-toolbar md-theme="top" layout="row" class="md-whiteframe-z1">
-      <h3>Name of the site</h3>
-    </md-toolbar>
+    <div ng-controller="CompetitionCtrl">
+      <md-toolbar md-theme="top" layout="row" class="md-whiteframe-z1">
+        <h3>{{competition.name}}</h3>
+      </md-toolbar>
+    </div>
 
     <section layout="row" flex>
       <md-sidenav md-theme="sidebar" md-component-id="left" md-is-locked-open="true">
@@ -35,7 +37,7 @@
                 <div class="md-list-item-text">
                   <h3>{{pool.name}}</h3>
                   <p>{{pool.description}}</p>
-                  <md-checkbox class="md-secondary" ng-model="pool.selected" ng-click="updateTeams()"></md-checkbox>
+                  <md-checkbox class="md-secondary" ng-model="pool.selected" ng-click="updateTeams()" aria-label="{{pool.name}}"></md-checkbox>
                 </div>
               </md-list-item>
             </md-list>
@@ -98,6 +100,7 @@
         <script src="scripts/controllers/team.js"></script>
         <script src="scripts/services/filter.js"></script>
         <script src="scripts/controllers/teamdetails.js"></script>
+        <script src="scripts/controllers/competition.js"></script>
         <!-- endbuild -->
 </body>
 </html>

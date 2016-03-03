@@ -36,6 +36,10 @@ angular.module('robocodecupApp')
         }
         counter++;
       });
+
+      if ($scope.selectedIndex == -1) {
+        $scope.selectedIndex = 0;
+      }
     });
 
     $scope.$watch('selectedIndex', function(current, old) {

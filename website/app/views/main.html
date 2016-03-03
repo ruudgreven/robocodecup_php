@@ -1,23 +1,113 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
+<div ng-if="showlivestream">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>
+        <span>Now running battles live for competition {{competition.name}}</span>
+      </h2>
+    </div>
+  </md-toolbar>
+
+  <div style="background-color: black;">
+    <iframe width="640" height="360" src="https://www.youtube.com/embed/6HPceVL0gHg?autoplay=1" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>
+        <span>All this is live! No robots were harmed during the recording of these battles!</span>
+      </h2>
+    </div>
+  </md-toolbar>
+
+  <div layout="row" layout-align="center center" layout-padding>
+    <!-- spacer -->
+  </div>
 </div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
+<div layout="row" layout-align="center center" layout-padding>
+  <h1>Welcome to the {{competition.name}} website!</h1>
+</div>
 
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>
+      <span>Current ranking (Round {{roundnumber}})</span>
+    </h2>
+  </div>
+</md-toolbar>
 
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+<div class="md-padding" layout="row" layout-align="center center" ng-show="loading">
+  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+</div>
+
+<md-table-container>
+  <table md-table>
+    <thead md-head md-order="order">
+    <tr md-row>
+      <th md-column><span>Pool</span></th>
+      <th md-column md-order-by="rank"><span>Rank</span></th>
+      <th md-column md-order-by="team_name"><span>Name</span></th>
+      <th md-column md-numeric md-order-by="totalscore"><span>Total</span></th>
+
+      <th md-column md-numeric md-order-by="survivalscore">Survivalscore</th>
+      <th md-column md-numeric md-order-by="survivalbonus">Survivalbonus</th>
+      <th md-column md-numeric md-order-by="bulletdamage">Bulletdamage</th>
+      <th md-column md-numeric md-order-by="bulletbonus">Bulletbonus</th>
+      <th md-column md-numeric md-order-by="ramdamage">Ramdamage</th>
+      <th md-column md-numeric md-order-by="rambonus">Rambonus</th>
+      <th md-column md-numeric md-order-by="firsts">Firsts</th>
+      <th md-column md-numeric md-order-by="seconds">Seconds</th>
+      <th md-column md-numeric md-order-by="thirds">Thirds</th>
+    </tr>
+    </thead>
+    <tbody md-body>
+    <tr md-row ng-repeat="score in scores | orderBy: order">
+      <td md-cell>
+        <md-button class="md-fab md-mini md-primary" aria-label="Played in {{score.pool_name}}">
+          {{score.pool_id}}
+          <md-tooltip md-direction="top">
+            Played in {{score.pool_name}}
+          </md-tooltip>
+        </md-button>
+      </td>
+      <td md-cell>
+        <md-button class="md-fab md-mini md-accent md-hue-{{score.rank}}" aria-label="Ranking {{score.rank}}">
+          {{score.rank}}
+          <md-tooltip md-direction="top">
+            Ranked {{score.rank}}
+          </md-tooltip>
+        </md-button>
+      </td>
+      <td md-cell>
+        <md-button ng-href="/#/round/{{roundnumber}}/{{score.team_id}}">{{score.team_name}}</md-button>
+      </td>
+      <td md-cell>{{score.totalscore}}</td>
+
+      <td md-cell>{{score.survivalscore}}</td>
+      <td md-cell>{{score.survivalbonus}}</td>
+      <td md-cell>{{score.bulletdamage}}</td>
+      <td md-cell>{{score.bulletbonus}}</td>
+      <td md-cell>{{score.ramdamage}}</td>
+      <td md-cell>{{score.rambonus}}</td>
+
+      <td md-cell>{{score.firsts}}</td>
+      <td md-cell>{{score.seconds}}</td>
+      <td md-cell>{{score.thirds}}</td>
+    </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+<md-divider></md-divider>
+<div layout="row" layout-align="end center" layout-padding>
+  The scores are average scores for every teams in every pool.
+</div>
+
+<div layout="row" layout-align="center center" layout-padding>
+  <!-- spacer -->
+</div>
+
+<md-divider></md-divider>
+<div layout="row" layout-align="center center" layout-padding>
+  This website is powered by <a href="http://github.com/ruudgreven/robocodecup" target="_blank">Robocodecup</a>
 </div>

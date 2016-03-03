@@ -52,4 +52,5 @@ angular
       });
   }).constant('config', {
     api: 'http://localhost/robocodecupapi/api',
+    showlivestream: false
   });
