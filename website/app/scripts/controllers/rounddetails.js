@@ -11,6 +11,7 @@ angular.module('robocodecupApp')
   .controller('RounddetailsCtrl', function ($scope, $routeParams, $http, $log, config, filter) {
     var allscores = [];
 
+    $scope.loading = true;
     $scope.roundnumber = $routeParams.roundnumber;
 
     $scope.scores = [];
@@ -24,6 +25,7 @@ angular.module('robocodecupApp')
         allscores.push(score);
         $scope.scores = filter.doFiltering(allscores);
       });
+      $scope.loading = false;
     });
 
     var applyFilter = function() {

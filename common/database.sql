@@ -69,6 +69,8 @@ CREATE TABLE battle (
   round_number INT,
   datetime DATETIME,
   official BOOL,
+  replay_file VARCHAR(255),
+  results_file VARCHAR(255),
   PRIMARY KEY (id),
   UNIQUE (competition_id, datetime),
   FOREIGN KEY (competition_id) REFERENCES competition(id),

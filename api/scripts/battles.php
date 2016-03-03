@@ -81,7 +81,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
 
                 //Create battle
                 echo "    Adding battle to battle table...";
-                $sQuery = "INSERT INTO battle (competition_id, pool_id, round_number, datetime, official) VALUES (" . COMPETITION_ID . ", '" . $sPoolname . "', '" . $iRound . "', '" . $sRunDateTime . "', " . ($bOfficial?1:0) . ")";
+                $sQuery = "INSERT INTO battle (competition_id, pool_id, round_number, datetime, official, replay_file, results_file) VALUES (" . COMPETITION_ID . ", '" . $sPoolname . "', '" . $iRound . "', '" . $sRunDateTime . "', " . ($bOfficial?1:0) . ", '" . str_replace("output/", "", $oBattle->filename_replay_tenrounds) . "', '" . str_replace("output/", "",$oBattle->filename_results_tenrounds) . "')";
 
                 try {
                     $oResult = $oDbHelper->executeQuery($sQuery);

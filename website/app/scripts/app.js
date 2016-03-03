@@ -42,9 +42,14 @@ angular
         controller: 'RounddetailsCtrl',
         controllerAs: 'rounddetails'
       })
+      .when('/round/:roundnumber/:teamid', {
+        templateUrl: 'views/teamdetails.html',
+        controller: 'TeamdetailsCtrl',
+        controllerAs: 'teamdetails'
+      })
       .otherwise({
         redirectTo: '/'
       });
   }).constant('config', {
-    api: 'http://localhost/robocodecupapi/api'
+    api: 'http://localhost/robocodecupapi/api',
   });

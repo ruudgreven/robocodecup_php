@@ -10,40 +10,41 @@
 angular.module('robocodecupApp')
   .service('filter', function ($log) {
     var filteroptions = {};
-    var filteringenabled = false;
 
     filteroptions.filterpools = {};
 
     filteroptions.setFilterPools = function(pools) {
       filteroptions.filterpools = pools;
+      filteroptions.filterteam = '';
     };
 
-    filteroptions.doFiltering = function(scores) {
+    filteroptions.doFiltering = function(objects) {
       $log.log('Do filtering on pools ' + filteroptions.filterpools);
 
-      var newscores = [];
-      var count = 1;
-      scores.forEach(function(score) {
-        if (filteroptions.filterpools.indexOf(score.pool_id) != -1) {
-          score.rank = count;
-          newscores.push(score);
-          count++;
+      var newobjects = [];
+      var counter = 1;
+      objects.forEach(function(object) {
+        if (filteroptions.filterpools.indexOf(object.pool_id) != -1) {
+          if (object.scores) {
+            //If there is a subobject with scores
+            var scorecounter = 1;
+            object.scores.forEach(function(score) {
+              score.rank = scorecounter;
+              scorecounter++;
+            });
+          } else {
+            //If there is no subobject with scores
+            object.rank = counter;
+          }
+          newobjects.push(object);
+          counter++
         }
       });
-
-      return newscores;
+      return newobjects;
     };
 
     filteroptions.hasFilter = function() {
       return filteroptions.filterpools.length !== 0;
-    };
-
-    filteroptions.disableFiltering = function() {
-      filteroptions.filteringenabled = false;
-    };
-
-    filteroptions.enableFiltering = function() {
-      filteroptions.filteringenabled = false;
     };
 
     return filteroptions;

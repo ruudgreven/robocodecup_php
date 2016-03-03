@@ -51,9 +51,31 @@ Get  all pools from the current competition with their associated teams.
     ]
 }
 
-
 ```
 
+## GET /team/__TEAMID__.json
+Get  all the information from a team
+Arguments:
+- teamid, The id of the team you want to view.
+
+#### Example output
+```
+{
+    "status": "ok",
+    "response": [
+        {
+            "fullname": "pgr.team.EP_BaseTeam",
+            "authorname": "",
+            "name": "EP_BaseTeam (de 2e)",
+            "secretkey": null,
+            "id": "EHI1VSx_1",
+            "competition_id": 1,
+            "description": "Pauls team, jaja."
+        }
+    ]
+}
+
+```
 
 
 ### GET /round.json
@@ -135,77 +157,6 @@ when there is no info for this round
 ```
 
 
-
-
-### GET /round/__NUM__/battles.json
-Get a list of all played battles in the given round in the current competition, ordened by the pools
-
-Under every pool there is named array with battles, every battle has a unique number as name and the battle itself as value.
-
-A battle is an object with an id, a datetime that it's played, a flag that describes whether or not it's official or not. Inside a battle there is an array with scores.
-
-In the array scores there is a list of teamproperties (id, name) combined with the scores of this team
-
-
-Arguments:
-- num, The number of the round you want to view.
-
-#### Example output
-```
-{
-    "status": "ok",
-    "response": [
-        {
-            "E": {
-                "name": "Enschede",
-                "id": "E",
-                "battles": {
-                    "32": {
-                        "scores": [
-                            {
-                                "rank": "1",
-                                "survivalscore": "5550",
-                                "totalscore": "14688",
-                                "totalpercentage": "78",
-                                "ramdamage": "3326",
-                                "bulletdamage": "3812",
-                                "survivalbonus": "840",
-                                "firsts": "9",
-                                "name": "EP_BaseTeam",
-                                "id": "EHI1VSx_1",
-                                "thirds": "0",
-                                "seconds": "1",
-                                "bulletbonus": "822",
-                                "rambonus": "338"
-                            },
-                            ...
-                        ],
-                        "official": "1",
-                        "datetime": "2016-03-01 10:33:04",
-                        "id": "32"
-                    },
-                    ...
-                }
-            }
-        }
-    ]
-}
-```
-
-when there is no info for this round
-```
-{
-    "status": "ok",
-    "response": [
-        [
-
-        ]
-    ]
-}
-```
-
-
-
 ### GET /round/__NUM__/ranking.json
 Get the ranking in the given round in the current competition, ordened by the pools. The ranking is the sum of alle scores in this round per team per pool
 
@@ -251,9 +202,61 @@ when there is no info for this round
 {
     "status": "ok",
     "response": [
-        [
 
-        ]
+    ]
+}
+```
+
+
+
+### GET /round/__NUM__/__TEAMID__/battles.json
+Received all the battles in the given round for the given team.
+
+Arguments:
+- num, The number of the round you want to view.
+- teamid, The id of the team you want to view.
+
+#### Example output
+```
+{
+    "status": "ok",
+    "response": [
+        {
+            "pool_name": "Enschede",
+            "scores": [
+                {
+                    "survivalscore": 5850,
+                    "totalscore": 14181,
+                    "team_name": "EP_BaseTeam (de 2e)",
+                    "totalpercentage": 78,
+                    "ramdamage": 3042,
+                    "bulletdamage": 3471,
+                    "survivalbonus": 760,
+                    "firsts": 7,
+                    "thirds": 0,
+                    "seconds": 3,
+                    "bulletbonus": 680,
+                    "rambonus": 379,
+                    "team_id": "EHI1VSx_1"
+                },
+                ...
+            ],
+            "pool_id": "E",
+            "datetime": "2016-03-01 08:31:15",
+            "id": 27
+        },
+        ...
+    ]
+}
+
+```
+
+when there is no info for this round or team
+```
+{
+    "status": "ok",
+    "response": [
+
     ]
 }
 ```

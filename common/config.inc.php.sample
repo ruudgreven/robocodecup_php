@@ -12,6 +12,8 @@
 	//The templates folder
 	define('TEMPLATE_FOLDER', 'templates');
 
+    //The downloads url
+    define('DOWNLOADS_URL', 'http://files.useb.nl');
 /**
  * DATABASE SETTINGS
  */

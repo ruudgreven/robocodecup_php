@@ -1,0 +1,85 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>
+      <span>Battles for team {{team.name}} in round {{roundnumber}}</span>
+    </h2>
+  </div>
+</md-toolbar>
+
+<div class="md-padding" layout="row" layout-align="center center" ng-show="loading">
+  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+</div>
+
+<div class="md-padding" layout="row" layout-align="start center">
+  {{team.description}}
+</div>
+
+<md-divider></md-divider>
+
+<div ng-repeat="battle in battles">
+  <h3>Battle #{{battle.id}}</h3>
+
+  <md-table-container>
+    <table md-table>
+      <thead md-head md-order="order">
+      <tr md-row>
+        <th md-column><span>Pool</span></th>
+        <th md-column md-order-by="rank"><span>Rank</span></th>
+        <th md-column md-order-by="team_name"><span>Name</span></th>
+        <th md-column md-numeric md-order-by="totalscore"><span>Total</span></th>
+
+        <th md-column md-numeric md-order-by="survivalscore">Survivalscore</th>
+        <th md-column md-numeric md-order-by="survivalbonus">Survivalbonus</th>
+        <th md-column md-numeric md-order-by="bulletdamage">Bulletdamage</th>
+        <th md-column md-numeric md-order-by="bulletbonus">Bulletbonus</th>
+        <th md-column md-numeric md-order-by="ramdamage">Ramdamage</th>
+        <th md-column md-numeric md-order-by="rambonus">Rambonus</th>
+        <th md-column md-numeric md-order-by="firsts">Firsts</th>
+        <th md-column md-numeric md-order-by="seconds">Seconds</th>
+        <th md-column md-numeric md-order-by="thirds">Thirds</th>
+      </tr>
+      </thead>
+      <tbody md-body>
+      <tr md-row ng-repeat="score in battle.scores | orderBy: order">
+        <td md-cell>
+          <md-button class="md-fab md-mini md-primary" aria-label="Played in {{battle.pool_name}}">
+            {{battle.pool_id}}
+            <md-tooltip md-direction="top">
+              Played in {{battle.pool_name}}
+            </md-tooltip>
+          </md-button>
+        </td>
+        <td md-cell>
+          <md-button class="md-fab md-mini md-accent md-hue-{{score.rank}}" aria-label="Ranking {{score.rank}}">
+            {{score.rank}}
+            <md-tooltip md-direction="top">
+              Ranked {{score.rank}}
+            </md-tooltip>
+          </md-button>
+        </td>
+        <td md-cell>
+          <md-button ng-href="/#/round/{{roundnumber}}/{{score.team_id}}">{{score.team_name}}</md-button>
+        </td>
+        <td md-cell>{{score.totalscore}}</td>
+
+        <td md-cell>{{score.survivalscore}}</td>
+        <td md-cell>{{score.survivalbonus}}</td>
+        <td md-cell>{{score.bulletdamage}}</td>
+        <td md-cell>{{score.bulletbonus}}</td>
+        <td md-cell>{{score.ramdamage}}</td>
+        <td md-cell>{{score.rambonus}}</td>
+
+        <td md-cell>{{score.firsts}}</td>
+        <td md-cell>{{score.seconds}}</td>
+        <td md-cell>{{score.thirds}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </md-table-container>
+
+  <md-divider></md-divider>
+  <div layout="row" layout-align="end center" layout-wrap>
+    <md-button target="_blank" href="{{battle.replay_url}}" class="md-raised">Download replay</md-button>
+    <md-button target="_blank" href="{{battle.results_url}}" class="md-raised md-primary">Download scores</md-button>
+  </div>
+</div>

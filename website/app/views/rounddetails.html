@@ -3,9 +3,12 @@
     <h2>
       <span>Ranking in round {{roundnumber}}</span>
     </h2>
-    <span flex></span>
   </div>
 </md-toolbar>
+
+<div class="md-padding" layout="row" layout-align="center center" ng-show="loading">
+  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+</div>
 
 <md-table-container>
   <table md-table>
@@ -46,7 +49,7 @@
         </md-button>
       </td>
       <td md-cell>
-        <md-button ng-href="/round/{{roundnumber}}/{{score.team_id}}">{{score.team_name}}</md-button>
+        <md-button ng-href="/#/round/{{roundnumber}}/{{score.team_id}}">{{score.team_name}}</md-button>
       </td>
       <td md-cell>{{score.totalscore}}</td>
 
@@ -64,3 +67,10 @@
     </tbody>
   </table>
 </md-table-container>
+
+<md-divider></md-divider>
+
+<div layout="row" layout-align="end center" layout-padding>
+  The scores are average scores for every teams in every pool.
+</div>
+
