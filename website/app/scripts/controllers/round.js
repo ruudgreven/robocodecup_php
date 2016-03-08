@@ -24,16 +24,10 @@ angular.module('robocodecupApp')
     }).then(function mySucces(response) {
       $scope.rounds = response.data.response.rounds;
 
-      var currentRound = response.data.response.current;
-
       var counter = 0;
       $scope.rounds.forEach(function(round) {
         $scope.tabs.push({title: 'Round ' + round.number});
 
-        //If there is a round given in the url make that the default
-        if (round.number == currentRound) {
-          $scope.selectedIndex = counter + 1;
-        }
         counter++;
       });
 

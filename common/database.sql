@@ -100,4 +100,21 @@ CREATE TABLE battlescore (
   FOREIGN KEY (competition_id, pool_id) REFERENCES pool(competition_id, id),
   FOREIGN KEY (battle_id) REFERENCES battle(id),
   FOREIGN KEY (competition_id, team_id) REFERENCES team(competition_id, id)
-)
+);
+
+CREATE TABLE message (
+  id INT NOT NULL AUTO_INCREMENT,
+  competition_id INT NOT NULL,
+  title VARCHAR(64) NOT NULL,
+  message VARCHAR(512) NOT NULL,
+  actiontitle VARCHAR(32),
+  actionlink VARCHAR(128),
+  imageurl VARCHAR(128),
+  date DATETIME,
+  showfrom DATETIME,
+  showtill DATETIME,
+  featuredfrom DATETIME,
+  featuredtill DATETIME,
+  PRIMARY KEY (id),
+  FOREIGN KEY (competition_id) REFERENCES competition(id)
+);

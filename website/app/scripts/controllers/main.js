@@ -14,6 +14,7 @@ angular.module('robocodecupApp')
     $scope.loading = true;
     $scope.roundnumber = 0;
     $scope.scores = [];
+    $scope.featuredmessages = [];
 
     //Get the competition
     $http({
@@ -22,6 +23,15 @@ angular.module('robocodecupApp')
     }).then(function mySucces(response) {
       $scope.competition = response.data.response[0];
     });
+
+    //Get featured messages
+    $http({
+      method : 'GET',
+      url : config.api + '/messages/featured.json'
+    }).then(function mySucces(response) {
+      $scope.messages = response.data.response;
+    });
+
 
     //Get the ranking for the current round
     $http({

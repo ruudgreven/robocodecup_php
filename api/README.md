@@ -260,3 +260,59 @@ when there is no info for this round or team
     ]
 }
 ```
+
+
+
+### GET /messages.json
+Received all messages for this competition.
+
+#### Example output
+```
+{
+    "status": "ok",
+    "response": [
+        {
+            "title": "Plaatje",
+            "actiontitle": "",
+            "imageurl": "https://material.angularjs.org/latest/img/icons/angular-logo.svg",
+            "actionlink": "",
+            "id": 5,
+            "date": "2016-03-08 00:00:00",
+            "showfrom": "2016-03-08 00:00:00",
+            "featuredtill": "2016-05-05 00:00:00",
+            "showtill": "0000-00-00 00:00:00",
+            "message": "Haar gebit was een plaatje",
+            "competition_id": 1,
+            "featuredfrom": "2016-03-08 00:00:00"
+        }
+    ]
+}
+
+```
+
+
+
+### GET /messages/featured.json
+Received all featured messages for this competition.
+
+#### Example output
+```
+{
+    "status": "ok",
+    "response": [
+        {
+            "title": "Plaatje",
+            "actiontitle": "",
+            "imageurl": "https://material.angularjs.org/latest/img/icons/angular-logo.svg",
+            "actionlink": "",
+            "id": 5,
+            "date": "2016-03-08 00:00:00",
+            "showfrom": "2016-03-08 00:00:00",
+            "featuredtill": "2016-05-05 00:00:00",
+            "showtill": "0000-00-00 00:00:00",
+            "message": "Haar gebit was een plaatje",
+            "competition_id": 1,
+            "featuredfrom": "2016-03-08 00:00:00"
+        }
+    ]
+}

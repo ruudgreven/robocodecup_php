@@ -24,8 +24,23 @@
   </div>
 </div>
 
-<div layout="row" layout-align="center center" layout-padding>
-  <h1>Welcome to the {{competition.name}} website!</h1>
+<div flex layout="column" ng-repeat="message in messages">
+  <md-card>
+    <md-card-title>
+      <md-card-title-text style="text-align: left;">
+        <span class="md-headline">{{message.title}}</span>
+        <span class="md-subhead">{{message.message}}</span>
+      </md-card-title-text>
+      <md-card-title-media ng-if="message.imageurl != ''">
+        <img class="md-media-sm card-media" ng-src="{{message.imageurl}}"/>
+      </md-card-title-media>
+    </md-card-title>
+    <md-card-actions layout="row" layout-align="end center">
+      <div ng-if="message.actionlink != ''">
+        <md-button ng-href="{{message.actionlink}}">{{message.actiontitle}}</md-button>
+      </div>
+    </md-card-actions>
+  </md-card>
 </div>
 
 <md-toolbar>

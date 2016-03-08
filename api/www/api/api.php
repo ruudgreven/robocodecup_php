@@ -245,5 +245,33 @@ Flight::route('GET /round/@sRoundId/@sTeamId/battles.json', function($sRoundId, 
     $oDbHelper->outputArray($aBattles);
 });
 
+
+
+/**
+ * Get the featured messages
+ */
+Flight::route('GET /messages/featured.json', function(){
+    global $oDbHelper;
+
+    $sQuery = "SELECT * FROM message WHERE competition_id = " . COMPETITION_ID . " AND CURDATE() >= featuredfrom  AND CURDATE() <= featuredtill;";
+    $oResult = $oDbHelper->executeQuery($sQuery);
+
+    //Return
+    $oDbHelper->outputDbResult($oResult);
+});
+
+/**
+ * Get the featured messages
+ */
+Flight::route('GET /messages.json', function(){
+    global $oDbHelper;
+
+    $sQuery = "SELECT * FROM message WHERE competition_id = " . COMPETITION_ID . " AND CURDATE() >= showfrom AND (CURDATE() <= showtill OR showtill = '0000-00-00 00:00');";
+    $oResult = $oDbHelper->executeQuery($sQuery);
+
+    //Return
+    $oDbHelper->outputDbResult($oResult);
+});
+
 Flight::start();
 ?>
