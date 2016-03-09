@@ -32,7 +32,6 @@ angular.module('robocodecupApp')
       $scope.messages = response.data.response;
     });
 
-
     //Get the ranking for the current round
     $http({
       method : 'GET',
@@ -43,9 +42,9 @@ angular.module('robocodecupApp')
       if (response.data.response.current == -1) {
         if (response.data.response.previous != -1) {
           round = response.data.response.previous;
-        } else {
-          round = 3;
         }
+      } else {
+        round = response.data.response.current;
       }
 
       $scope.roundnumber = round;

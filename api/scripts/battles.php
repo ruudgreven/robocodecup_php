@@ -159,7 +159,7 @@ function parseFile($sPoolId, $iRound, $iBattleId, $sFilename) {
                 "'" . COMPETITION_ID . "', " .
                 "'" . $sPoolId . "', " .
                 "'" . $iBattleId . "', " .
-                "'" . $sTeamId . "', " .
+                "'" . $oDbHelper->escape($sTeamId) . "', " .
                 "'" . $sRank . "', " .
                 "'" . $iTotal . "', " .
                 "'" . $iTotalPerc . "', " .

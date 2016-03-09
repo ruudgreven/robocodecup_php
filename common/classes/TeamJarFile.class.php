@@ -90,14 +90,21 @@ class TeamJarFile {
                     foreach ($aRobots as $sRobotname) {
                         $bFound = false;
 
+                        $sRobotname = trim($sRobotname);
+                        if (substr($sRobotname, -1) == '*') { //There is a star in the robotname, remove it
+                            $sRobotname = substr($sRobotname, 0, -1);
+                        }
+
                         foreach ($this->aClasses as $sClass) {
-                            if ($sRobotname == $sClass || $sRobotname == $sClass . "*") {
+                            //Check if the name matches
+                            if ($sRobotname == $sClass) {
                                 $bFound = true;
+                                break;
                             }
                         }
 
                         if (!$bFound) {
-                            throw new Exception("There is a reference to the robot " . $sRobotname . " in the teamfile, but this robot does not exists");
+                            throw new Exception("There is a reference to the robot " . $sRobotname . " in the teamfile, but this robot does not exists in : " . var_export($this->aClasses, true));
                         }
                     }
                 } else if (strpos($sLine, "team.author.name") !== FALSE) {               //Read team.authorname and put it to the authorname field

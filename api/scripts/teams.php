@@ -61,22 +61,22 @@ function addTeamsFromBattleConfiguration($sFilename, $bUpdate = true) {
                 "'" . $oTeam->id . "'," .
                 "'" . COMPETITION_ID . "'," .
                 "'" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "'," .
-                "'" . $oTeam->teamname . "'," .
-                "'" . $oTeam->authorname . "'," .
-                "'" . $oTeam->description ."'" .
+                "'" . $oDbHelper->escape($oTeam->teamname) . "'," .
+                "'" . $oDbHelper->escape($oTeam->authorname) . "'," .
+                "'" . $oDbHelper->escape($oTeam->description) ."'" .
                 ");";
         } else {
             $sQuery = "INSERT INTO team (id, competition_id, fullname, name, authorname, description) VALUES (" .
                 "'" . $oTeam->id . "'," .
                 "'" . COMPETITION_ID . "'," .
                 "'" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "'," .
-                "'" . $oTeam->teamname . "'," .
-                "'" . $oTeam->authorname . "'," .
-                "'" . $oTeam->description ."'" .
-                ") ON DUPLICATE KEY UPDATE fullname = '" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "', name = '" . $oTeam->teamname . "', authorname = '" . $oTeam->authorname . "', description = '" . $oTeam->description . "';";
+                "'" . $oDbHelper->escape($oTeam->teamname) . "'," .
+                "'" . $oDbHelper->escape($oTeam->authorname) . "'," .
+                "'" . $oDbHelper->escape($oTeam->description) ."'" .
+                ") ON DUPLICATE KEY UPDATE fullname = '" . substr(str_replace("/", ".", $oTeam->teamfile), 0, -5) . "', name = '" . $oDbHelper->escape($oTeam->teamname) . "', authorname = '" . $oDbHelper->escape($oTeam->authorname) . "', description = '" . $oDbHelper->escape($oTeam->description) . "';";
         }
-
         $oResult = $oDbHelper->executeQuery($sQuery);
     }
 }
+
 ?>

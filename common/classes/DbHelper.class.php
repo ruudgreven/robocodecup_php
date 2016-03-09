@@ -113,5 +113,12 @@ class DBHelper {
             echo "\n  In query: " . $sQuery . "\n";
         }
     }
+
+    /**
+     * Escape database strings
+     */
+    function escape($sString) {
+        return $this->oMysqli->real_escape_string($sString);
+    }
 }
 ?>

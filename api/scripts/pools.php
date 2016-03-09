@@ -69,7 +69,7 @@ function addPoolsFromBattleConfiguration($sFilename) {
             echo "    What description should I use for the pool? ";
             $sDescription = trim(fgets(STDIN));
 
-            $sQuery = "INSERT INTO pool (id, competition_id, name, description) VALUES ('" . $sPoolId . "', '" . COMPETITION_ID. "', '" . $sName. "', '" . $sDescription . "')";
+            $sQuery = "INSERT INTO pool (id, competition_id, name, description) VALUES ('" . $sPoolId . "', '" . COMPETITION_ID. "', '" . $oDbHelper->escape($sName). "', '" . $oDbHelper->escape($sDescription) . "')";
             $oResult = $oDbHelper->executeQuery($sQuery);
         }
 

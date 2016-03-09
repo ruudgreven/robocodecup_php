@@ -187,7 +187,7 @@ while (!$bProceed) {
 
 //****** Run the generated battlefiles ******
 $iNumberOfBattlesRunned = 0;
-echo "Running the battles (This may take some time. Capturing output to file)...";
+echo "Running the battles (This may take some time. Capturing output to file). If you see some errors, cancel the progress and check the teams and restart";
 ob_start();
 
 //Create a folder to place the battles

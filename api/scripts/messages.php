@@ -64,11 +64,11 @@ function addMessage() {
 
     $sQuery = "INSERT INTO message (competition_id, title, message, actiontitle, actionlink, imageurl, date, showfrom, showtill, featuredfrom, featuredtill) VALUES (" .
         COMPETITION_ID . ", ".
-        "'" . $sTitle . "'," .
-        "'" . $sMessage . "'," .
-        "'" . $sActionTitle . "'," .
-        "'" . $sActionLink . "'," .
-        "'" . $sImageUrl . "'," .
+        "'" . $oDbHelper->escape($sTitle) . "'," .
+        "'" . $oDbHelper->escape($sMessage) . "'," .
+        "'" . $oDbHelper->escape($sActionTitle) . "'," .
+        "'" . $oDbHelper->escape($sActionLink) . "'," .
+        "'" . $oDbHelper->escape($sImageUrl) . "'," .
         "'" . $dCurDate->format('Y-m-d') . "'," .
         "'" .$sBeginDate . "'," .
         "'" .$sEndDate . "'," .

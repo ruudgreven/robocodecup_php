@@ -43,7 +43,7 @@ function addCompetition() {
     echo "    What name should I use for the competition? ";
     $sName = trim(fgets(STDIN));
 
-    $sQuery = "INSERT INTO competition (name) VALUES ('" . $sName . "')";
+    $sQuery = "INSERT INTO competition (name) VALUES ('" . $oDbHelper->escape($sName) . "')";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     echo "\nPlease update your configuration if you want this competition to be the current competition\n";
