@@ -15,7 +15,6 @@ angular.module('robocodecupApp')
 
     filteroptions.setFilterPools = function(pools) {
       filteroptions.filterpools = pools;
-      filteroptions.filterteam = '';
     };
 
     filteroptions.doFiltering = function(objects) {

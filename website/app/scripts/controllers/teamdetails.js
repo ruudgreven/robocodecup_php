@@ -34,12 +34,13 @@ angular.module('robocodecupApp')
     }).then(function mySucces(response) {
       response.data.response.forEach(function(battle) {
         allbattles.push(battle);
-        $scope.battles = filter.doFiltering(allbattles);
       });
+      $scope.battles = filter.doFiltering(allbattles);
       $scope.loading = false;
     });
 
     var applyFilter = function() {
+      $log.log("apply filter");
       $scope.battles = filter.doFiltering(allbattles);
     };
 

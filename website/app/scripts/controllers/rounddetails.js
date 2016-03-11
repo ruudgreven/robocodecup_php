@@ -10,6 +10,7 @@
 angular.module('robocodecupApp')
   .controller('RounddetailsCtrl', function ($scope, $routeParams, $http, $log, config, filter) {
     var allscores = [];
+    var lastknownfilter;
 
     $scope.loading = true;
     $scope.roundnumber = $routeParams.roundnumber;
@@ -23,8 +24,9 @@ angular.module('robocodecupApp')
     }).then(function mySucces(response) {
       response.data.response.forEach(function(score) {
         allscores.push(score);
-        $scope.scores = filter.doFiltering(allscores);
       });
+
+      $scope.scores = filter.doFiltering(allscores);
       $scope.loading = false;
     });
 
@@ -36,6 +38,6 @@ angular.module('robocodecupApp')
     $scope.$watch(function(){
         return filter.filterpools;
       }, function(current, old) {
-        applyFilter();
+          applyFilter();
       });
   });

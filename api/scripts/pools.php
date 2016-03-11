@@ -74,7 +74,7 @@ function addPoolsFromBattleConfiguration($sFilename) {
         }
 
         echo "  Adding team to the pool\n";
-        $sQuery = "INSERT INTO poolteams (competition_id, pool_id, team_id) VALUES ('" . COMPETITION_ID . "', '" . $sPoolId . "', '" . $oTeam->id . "');";
+        $sQuery = "INSERT INTO poolteams (competition_id, pool_id, team_id) VALUES ('" . COMPETITION_ID . "', '" . $sPoolId . "', '" . $oTeam->id . "') ON DUPLICATE KEY UPDATE team_id = '" . $oTeam->id . "';";
         $oResult = $oDbHelper->executeQuery($sQuery);
     }
 }
