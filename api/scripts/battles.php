@@ -73,7 +73,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
         foreach($aBattles as $oBattle) {
             $sResultsFilename = $sFolder . "/" . $oBattle->filename_results_tenrounds;
             if (file_exists($sResultsFilename)) {
-                $iDatetime = filectime($sResultsFilename);
+                $iDatetime = filemtime($sResultsFilename);
 
                 //Get creation date of file and use as the rundatetime of the battle
                 $dRunDateTime = DateTime::createFromFormat('U', $iDatetime, $dTimeZone);
