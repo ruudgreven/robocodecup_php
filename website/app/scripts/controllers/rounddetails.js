@@ -30,14 +30,10 @@ angular.module('robocodecupApp')
       $scope.loading = false;
     });
 
-    var applyFilter = function() {
-      $scope.scores = filter.doFiltering(allscores);
-    };
-
     //Watch filterpool for changes
     $scope.$watch(function(){
         return filter.filterpools;
       }, function(current, old) {
-          applyFilter();
+        $scope.scores = filter.doFiltering(allscores);
       });
   });

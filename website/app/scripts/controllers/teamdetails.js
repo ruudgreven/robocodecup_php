@@ -39,15 +39,10 @@ angular.module('robocodecupApp')
       $scope.loading = false;
     });
 
-    var applyFilter = function() {
-      $log.log("apply filter");
-      $scope.battles = filter.doFiltering(allbattles);
-    };
-
     //Watch filterpool for changes
     $scope.$watch(function(){
       return filter.filterpools;
     }, function(current, old) {
-      applyFilter();
+      $scope.battles = filter.doFiltering(allbattles);
     });
   });

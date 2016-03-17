@@ -9,7 +9,7 @@
  */
 angular.module('robocodecupApp')
   .controller('CompetitionCtrl', function ($scope, $http, config) {
-    $scope.competition = "";
+    $scope.competition = '';
 
     //Get the competition
     $http({

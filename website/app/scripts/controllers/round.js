@@ -47,5 +47,4 @@ angular.module('robocodecupApp')
 
       }
     });
-
   });

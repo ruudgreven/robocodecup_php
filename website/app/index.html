@@ -52,10 +52,10 @@
                     ng-disabled="tab.disabled"
                     label="{{tab.title}}">
               <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-                <div ng-view=""></div>
               </div>
             </md-tab>
           </md-tabs>
+          <div ng-view=""></div>
         </div>
       </md-content>
     </section>
