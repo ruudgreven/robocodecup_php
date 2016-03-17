@@ -45,6 +45,9 @@ angular.module('robocodecupApp')
         }
       } else {
         round = response.data.response.current;
+        if (round.battlesplayed === 0) {
+          round = response.data.response.previous;
+        }
       }
 
       $scope.roundnumber = round;

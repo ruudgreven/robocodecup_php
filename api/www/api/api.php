@@ -71,7 +71,7 @@ Flight::route('GET /round.json', function(){
 
 
     //Get all rounds
-    $sQuery = "SELECT number, startdate, enddate FROM round WHERE competition_id=" . COMPETITION_ID . " ORDER BY number;";
+    $sQuery = "SELECT number, startdate, enddate, (SELECT COUNT(*) FROM battle WHERE battle.round_number = round.number) AS battlesplayed FROM round WHERE competition_id=" . COMPETITION_ID . " ORDER BY number;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Create round object
