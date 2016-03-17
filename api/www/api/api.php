@@ -24,7 +24,7 @@ Flight::route('GET /competition.json', function(){
 Flight::route('GET /pool.json', function(){
     global $oDbHelper;
 
-    $sQuery = "SELECT team.id, pool.id AS pool_id, pool.name AS pool_name, pool.description AS pool_description, team.fullname, team.name, team.authorname, team.description FROM pool, team, poolteams WHERE pool.competition_id = team.competition_id = poolteams.competition_id = " . COMPETITION_ID . " AND pool.id = poolteams.pool_id AND team.id = poolteams.team_id;";
+    $sQuery = "SELECT team.id, pool.id AS pool_id, pool.name AS pool_name, pool.description AS pool_description, team.fullname, team.name, team.authorname, team.description, team.teamlogourl, team.teamlogourl_thumb FROM pool, team, poolteams WHERE pool.competition_id = team.competition_id = poolteams.competition_id = " . COMPETITION_ID . " AND pool.id = poolteams.pool_id AND team.id = poolteams.team_id;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Cluster by pool id
@@ -54,7 +54,7 @@ Flight::route('GET /pool.json', function(){
 Flight::route('GET /team/@sTeamId.json', function($sTeamId){
     global $oDbHelper;
 
-    $sQuery = "SELECT id, fullname, name, authorname, description FROM team WHERE competition_id = " . COMPETITION_ID . " AND id='" . $sTeamId . "'";
+    $sQuery = "SELECT id, fullname, name, authorname, description, teamlogourl, teamlogourl_thumb FROM team WHERE competition_id = " . COMPETITION_ID . " AND id='" . $sTeamId . "'";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Return
@@ -131,7 +131,7 @@ Flight::route('GET /round/@sRoundId/team.json', function($sRoundId){
     }
 
     //Get all rounds
-    $sQuery = "SELECT team.id , pool.id AS pool_id, pool.name AS pool_name, team.fullname, team.name, team.authorname, team.description FROM battle, battlescore, team, pool WHERE battle.competition_id = team.competition_id = battlescore.competition_id = pool.competition_id = " . COMPETITION_ID . " AND battlescore.battle_id = battle.id AND battlescore.team_id = team.id AND battlescore.pool_id = pool.id AND round_number=" . $sRoundId. " GROUP BY id ORDER BY name;";
+    $sQuery = "SELECT team.id , pool.id AS pool_id, pool.name AS pool_name, team.fullname, team.name, team.authorname, team.description, team.teamlogourl, team.teamlogourl_thumb FROM battle, battlescore, team, pool WHERE battle.competition_id = team.competition_id = battlescore.competition_id = pool.competition_id = " . COMPETITION_ID . " AND battlescore.battle_id = battle.id AND battlescore.team_id = team.id AND battlescore.pool_id = pool.id AND round_number=" . $sRoundId. " GROUP BY id ORDER BY name;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Cluster by pool id
@@ -165,7 +165,7 @@ Flight::route('GET /round/@sRoundId/ranking.json', function($sRoundId){
         return;
     }
     //Get all rounds
-    $sQuery = "SELECT pool.id AS pool_id, pool.name AS pool_name, team.id as team_id, team.name AS team_name, ROUND(AVG(battlescore.totalscore)) AS totalscore, ROUND(AVG(battlescore.survivalscore)) AS survivalscore, ROUND(AVG(battlescore.survivalbonus)) AS survivalbonus, ROUND(AVG(battlescore.bulletdamage)) AS bulletdamage, ROUND(AVG(battlescore.bulletbonus)) AS bulletbonus, ROUND(AVG(battlescore.ramdamage)) AS ramdamage, ROUND(AVG(battlescore.rambonus)) AS rambonus, ROUND(AVG(battlescore.firsts)) AS firsts, ROUND(AVG(battlescore.seconds)) AS seconds, ROUND(AVG(battlescore.thirds)) AS thirds, COUNT(*) AS totalbattles FROM battle, battlescore, team, pool WHERE battle.competition_id = team.competition_id = battlescore.competition_id = pool.competition_id = " . COMPETITION_ID . " AND battlescore.battle_id = battle.id AND battlescore.team_id = team.id AND battlescore.pool_id = pool.id AND round_number=" . $sRoundId. " AND battle.official = 1 GROUP BY team_id, pool_id ORDER BY AVG(battlescore.totalscore) DESC;";
+    $sQuery = "SELECT pool.id AS pool_id, pool.name AS pool_name, team.id as team_id, team.name AS team_name, team.teamlogourl, team.teamlogourl_thumb, ROUND(AVG(battlescore.totalscore)) AS totalscore, ROUND(AVG(battlescore.survivalscore)) AS survivalscore, ROUND(AVG(battlescore.survivalbonus)) AS survivalbonus, ROUND(AVG(battlescore.bulletdamage)) AS bulletdamage, ROUND(AVG(battlescore.bulletbonus)) AS bulletbonus, ROUND(AVG(battlescore.ramdamage)) AS ramdamage, ROUND(AVG(battlescore.rambonus)) AS rambonus, ROUND(AVG(battlescore.firsts)) AS firsts, ROUND(AVG(battlescore.seconds)) AS seconds, ROUND(AVG(battlescore.thirds)) AS thirds, COUNT(*) AS totalbattles FROM battle, battlescore, team, pool WHERE battle.competition_id = team.competition_id = battlescore.competition_id = pool.competition_id = " . COMPETITION_ID . " AND battlescore.battle_id = battle.id AND battlescore.team_id = team.id AND battlescore.pool_id = pool.id AND round_number=" . $sRoundId. " AND battle.official = 1 GROUP BY team_id, pool_id ORDER BY AVG(battlescore.totalscore) DESC;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
     //Cluster by pool id
@@ -192,7 +192,7 @@ Flight::route('GET /round/@sRoundId/@sTeamId/battles.json', function($sRoundId, 
     }
     //Get all rounds
     $sQuery =
-        "SELECT battle.datetime, battle.replay_file, battle.results_file, pool.name AS pool_name, team.name AS team_name, battlescore.* FROM battlescore, battle, team, pool WHERE battle_id IN " .
+        "SELECT battle.datetime, battle.replay_file, battle.results_file, pool.name AS pool_name, team.name AS team_name, team.teamlogourl, team.teamlogourl_thumb, battlescore.* FROM battlescore, battle, team, pool WHERE battle_id IN " .
           "(SELECT battle_id FROM battle, battlescore" .
             " WHERE battle.id = battlescore.battle_id AND " .
             "battle.competition_id = battlescore.competition_id = " . COMPETITION_ID . " AND ".
@@ -222,6 +222,8 @@ Flight::route('GET /round/@sRoundId/@sTeamId/battles.json', function($sRoundId, 
         $oScore = (object) [
             'team_id' => $aObject['team_id'],
             'team_name' => $aObject['team_name'],
+            'teamlogourl' => $aObject['teamlogourl'],
+            'teamlogourl_thumb' => $aObject['teamlogourl_thumb'],
             'totalscore' => $aObject['totalscore'],
             'totalscore' => $aObject['totalscore'],
             'totalpercentage' => $aObject['totalpercentage'],

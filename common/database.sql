@@ -30,6 +30,8 @@ CREATE TABLE team (
   name VARCHAR(64),
   authorname VARCHAR(64),
   description VARCHAR(255),
+  teamlogourl VARCHAR(255),
+  teamlogourl_thumb VARCHAR(255),
   PRIMARY KEY (id, competition_id),
   FOREIGN KEY (competition_id) REFERENCES competition(id)
 );

@@ -61,6 +61,7 @@
     <tr md-row>
       <th md-column><span>Pool</span></th>
       <th md-column md-order-by="rank"><span>Rank</span></th>
+      <th md-column><span>Icon</span></th>
       <th md-column md-order-by="team_name"><span>Name</span></th>
       <th md-column md-numeric md-order-by="totalscore"><span>Total</span></th>
 
@@ -93,8 +94,12 @@
           </md-tooltip>
         </md-button>
       </td>
+
       <td md-cell>
-        <md-button ng-href="/#/round/{{roundnumber}}/{{score.team_id}}">{{score.team_name}}</md-button>
+        <img class="teamlogo_thumb" ng-src="{{score.teamlogourl_thumb}}"/>
+      </td>
+      <td md-cell>
+        <md-button ng-href="/#/round/{{roundnumber}}/{{score.team_id}}" aria-label="Team name">{{score.team_name}}</md-button>
       </td>
       <td md-cell>{{score.totalscore}}</td>
 

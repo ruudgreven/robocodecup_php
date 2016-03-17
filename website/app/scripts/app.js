@@ -51,6 +51,6 @@ angular
         redirectTo: '/'
       });
   }).constant('config', {
-    api: 'http://api.useb.nl/api',
+    api: 'http://localhost/robocodecupapi/api',
     showlivestream: true
   });
