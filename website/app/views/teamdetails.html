@@ -6,12 +6,24 @@
   </div>
 </md-toolbar>
 
-<div class="md-padding" layout="row" layout-align="center center" ng-show="loading">
-  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+<div flex layout="column">
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">{{team.name}}</span>
+        <span class="md-subhead">{{team.description}}</span>
+      </md-card-title-text>
+      <md-card-title-media>
+        <div class="md-media-lg card-media">
+          <img class="teamlogo" ng-src="{{team.teamlogourl}}"/>
+        </div>
+      </md-card-title-media>
+    </md-card-title>
+  </md-card>
 </div>
 
-<div class="md-padding" layout="row" layout-align="start center">
-  {{team.description}}
+<div class="md-padding" layout="row" layout-align="center center" ng-show="loading">
+  <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 </div>
 
 <md-divider></md-divider>
