@@ -97,7 +97,7 @@ class TeamJarFile {
 
                         foreach ($this->aClasses as $sClass) {
                             //Check if the name matches
-                            if ($sRobotname == $sClass) {
+                            if (substr($sRobotname, 0, strlen($sClass)) == $sClass) {
                                 $bFound = true;
                                 break;
                             }
