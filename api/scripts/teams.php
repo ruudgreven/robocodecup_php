@@ -18,9 +18,19 @@ try {
             throw new Exception("File does not exists");
         }
         addTeamsFromBattleConfiguration($sFilename, true);
+    } else if ($sCommand == "setlogo") {
+        $sTeamname = $argv[2];
+        $sLogoUrl = $argv[3];
+
+        setTeamLogo($sTeamname, $sLogoUrl, false);
+    } else if ($sCommand == "setlogothumb") {
+        $sTeamname = $argv[2];
+        $sLogoUrl = $argv[3];
+
+        setTeamLogo($sTeamname, $sLogoUrl, true);
     } else {
         echo("Usage:    " . $argv[0] . " <command> <args>\n");
-        echo("      Valid commands: list, add <battleconfigurationfile>\n");
+        echo("      Valid commands: list, add <battleconfigurationfile>, setlogo <team_id> <logourl>, setlogothumb <team_id> <logourl>\n");
     }
 } catch (Exception $e) {
     $oDbHelper->printError($e->getMessage() ."\n");
@@ -79,4 +89,35 @@ function addTeamsFromBattleConfiguration($sFilename, $bUpdate = true) {
     }
 }
 
+/**
+ * Set a team logo
+ * @param The teamname
+ * @param The logo url
+ */
+function setTeamLogo($sTeamname, $sLogoUrl, $bThumb) {
+    global $oDbHelper;
+
+    //Check if the team exists
+    $oResult = $oDbHelper->executeQuery("SELECT * FROM team WHERE id='" . $sTeamname . "';");
+    if (mysqli_num_rows($oResult) !== 1) {
+        throw new Exception("The team id does not exists");
+    }
+
+    //Check if the image file exists
+    $aFileHeaders = get_headers($sLogoUrl);
+    if($aFileHeaders[0] == 'HTTP/1.1 404 Not Found') {
+        throw new Exception("The image file does not exists");
+    }
+
+    if (!$bThumb) {
+        echo "Setting logo...";
+        $sQuery = "UPDATE team SET teamlogourl='" . $sLogoUrl . "' WHERE id='" . $sTeamname . "'; ";
+        $oResult = $oDbHelper->executeQuery($sQuery);
+    } else {
+        echo "Setting thumbnail logo...";
+        $sQuery = "UPDATE team SET teamlogourl_thumb='" . $sLogoUrl . "' WHERE id='" . $sTeamname . "'; ";
+        $oResult = $oDbHelper->executeQuery($sQuery);
+    }
+    echo "OK!\n";
+}
 ?>
