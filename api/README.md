@@ -21,6 +21,28 @@ Get the current competition.
 
 
 ### GET /pool.json
+Get  all pools from the current competition
+
+#### Example output
+```
+{
+    "status": "ok",
+    "response": [
+        {
+            "E": {
+                "name": "Enschede",
+                "id": "E",
+                "description": "Alle klassen uit Enschede"
+            }
+            ...
+        }
+    ]
+}
+
+```
+
+
+### GET /poolteams.json
 Get  all pools from the current competition with their associated teams.
 
 #### Example output
@@ -47,6 +69,7 @@ Get  all pools from the current competition with their associated teams.
                 ],
                 "description": "Alle klassen uit Enschede"
             }
+            ...
         }
     ]
 }

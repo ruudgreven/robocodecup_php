@@ -1,5 +1,6 @@
 <?php
 include_once(dirname(__FILE__) . '/../../common/config.inc.php');
+include_once(dirname(__FILE__) . '/battleselectors/BaseBattleSelector.class.php');
 /**
  * Runs a battle configuration file
  */
@@ -7,16 +8,21 @@ include_once(dirname(__FILE__) . '/../../common/config.inc.php');
 //Read input
 $sBattleconfigurationFilename = $argv[1];
 $sOutputFolder = $argv[2];
+$sSelector = $argv[3];
 
 //Do some checks on the parameters
-if ($sBattleconfigurationFilename == "" || $sOutputFolder == "") {
-    echo("Usage:   " . $argv[0] . " <battleconfiguration file> <tmp and outputfolder>\n");
-    echo("Example: " . $argv[0] . " <battleconfiguration file> ~/tmp\n");
+if ($sBattleconfigurationFilename == "" || $sOutputFolder == "" || $sSelector == "") {
+    echo("Usage:   " . $argv[0] . " <battleconfiguration file> <tmp and outputfolder> <selector>\n");
+    echo("Example: " . $argv[0] . " <battleconfiguration file> ~/tmp battleselectors/one_to_one_per_pool.class.php\n");
     exit;
 }
 
 if (!is_file($sBattleconfigurationFilename)) {
     echo("ERROR: The battleconfiguration file '" . $sBattleconfigurationFilename . "' does not exists, or is not a file\n");
+    exit();
+}
+if (!is_file($sSelector)) {
+    echo("ERROR: The selector class file '" . $sSelector . "' does not exists, or is not a file\n");
     exit();
 }
 if (file_exists($sOutputFolder)) {
@@ -73,55 +79,16 @@ if ($hFileHandle = opendir($sJarFolder)) {
     exit();
 }
 
+//****** Run battle selector
+require_once(dirname(__FILE__) . "/" . $sSelector);
+$bs = new BattleSelector($sOutputFolder);
 
+//Generate battles
+$bs->generateBattles($aPools);
 
-//Generate battles for every pool
-$aPoolBattles = array();
-foreach ($aPools as $sPoolname => $aPool) {
-    $aPoolBattles[$sPoolname] = array();
+//Show the scheduled battles
+$bs->showBattles();
 
-    foreach ($aPool as $oTeam) {
-        //Read the teamfile and create the correct format (with dots and without .team)
-        $sTeamfile = str_replace("/", ".", $oTeam->teamfile);
-        $sTeamfile = substr($sTeamfile, 0, -5);
-
-        //Add a match to all other teams in this pool
-        foreach ($aPool as $oTeam2) {
-            if ($oTeam->id != $oTeam2->id) {
-                //Read the teamfile of the other team and create the correct format (with dots and without .team)
-                $sTeamfile2 = str_replace("/", ".", $oTeam2->teamfile);
-                $sTeamfile2 = substr($sTeamfile2, 0, -5);
-                $sFilenameStart = $sPoolname . "_" . $oTeam->id . "-" . $oTeam2->id;
-
-                //Create a battle
-                $oBattle = (object) [
-                    'team1_teamfile' => $sTeamfile,
-                    'team1_id' => $oTeam->id,
-                    'team2_teamfile' => $sTeamfile2,
-                    'team2_id' => $oTeam2->id,
-                    'filename_battle_singleround' => "battles/" . $sFilenameStart . "_singleround.battle",
-                    'filename_battle_tenrounds' => "battles/" . $sFilenameStart . "_tenrounds.battle",
-                    'filename_results_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.results",
-                    'filename_replay_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.br",
-                ];
-
-                //Add the battle
-                array_push($aPoolBattles[$sPoolname], $oBattle);
-            }
-        }
-    }
-}
-
-
-
-//****** Show scheduled battles ******
-echo "\nThe following battles will be played:\n";
-foreach ($aPoolBattles as $sPoolname => $aPoolBattle) {
-    echo("        In pool '" . $sPoolname . "':\n");
-    foreach ($aPoolBattle as $oBattle) {
-        echo("          " . $oBattle->team1_id . " - " . $oBattle->team2_id . "\n");
-    }
-}
 
 //Ask confirmation for battles
 $bProceed = false;
@@ -137,14 +104,8 @@ while (!$bProceed) {
     }
 }
 
-//****** Write battles to json file for later reference ******
-echo("Writing json file 'runnedbattles.json' ...");
-
-//Write to file
-$pFile = fopen($sOutputFolder . "/runnedbattles.json", 'w');
-fwrite($pFile, json_encode($aPoolBattles, JSON_PRETTY_PRINT) . "\n");
-fclose($pFile);
-echo("OK!\n");
+//Write battles to json file for later reference
+$bs->writeRunnedBattles();
 
 
 //****** Generating the battles ******
@@ -153,20 +114,8 @@ echo "Generating battles...\n";
 //Create a folder to place the battles
 mkdir($sOutputFolder . "/battles");
 
-foreach ($aPoolBattles as $sPoolname => $aPoolBattle) {
-    foreach ($aPoolBattle as $oBattle) {
-        echo "  Generating " . $sPoolname . ": " . $oBattle->team1_id . " - " . $oBattle->team2_id . "\n";
-
-        //Configure filenames
-        $sTemplateFilenameStart = "../" . TEMPLATE_FOLDER . "/";
-        $aTeams = [$oBattle->team1_teamfile, $oBattle->team2_teamfile];
-
-        //Build battle files based upon the templates
-        generateBattleFile($sTemplateFilenameStart . "singleround.battle", $sOutputFolder . "/" . $oBattle->filename_battle_singleround, $aTeams);
-        generateBattleFile($sTemplateFilenameStart . "tenrounds.battle", $sOutputFolder . "/" . $oBattle->filename_battle_tenrounds, $aTeams);
-    }
-}
-
+//Generate battle files
+$bs->writeBattleFiles();
 
 
 //Ask confirmation if the correct files are generated
@@ -217,8 +166,6 @@ file_put_contents($sOutputFolder . "/log.txt", $sOutputString);
 //****** Copy battle configuration file to outputfolder ******
 copy($sBattleconfigurationFilename, $sOutputFolder . "/battleconfiguration.json");
 
-
-
 //****** Check number of output files ******
 echo "Checking number of outputfiles...";
 $iCountedBattleFiles = 0;
@@ -240,29 +187,6 @@ if ($iCountedBattleFiles != $iNumberOfBattlesRunned * 2) {
 
 
 /**
- * Generate a battle file
- * sTemplate the template file
- * sFilename the output filename
- * $sTeams the teams in the battle
- */
-function generateBattleFile($sTemplate, $sFilename, $aTeams) {
-    $fFile = fopen($sFilename, "w") or die("Unable to open file!");
-
-    //Read template and write back
-    $fTemplate = fopen($sTemplate, "r");
-    $sContents = fread($fTemplate, filesize($sTemplate));
-    fclose($fTemplate);
-    fwrite($fFile, $sContents);
-    //Write battles
-    $sBattleString = "robocode.battle.selectedRobots=";
-    foreach ($aTeams as $sTeamname) {
-        $sBattleString .= $sTeamname . "*,";
-    }
-    fwrite($fFile, $sBattleString . "\n");
-    fclose($fFile);
-}
-
-/**
  * Run a battle
  * @param $sRobotFolder
  * @param $sBattleFolder
@@ -278,3 +202,4 @@ function runBattle($sRobotFolder, $sBattleFolder, $sBattleFilename, $sOutputFold
     exec($sCommand);
 }
 
+?>

@@ -33,6 +33,19 @@
           <secion>
             <md-subheader class="md-primary">Pools</md-subheader>
             <md-list layout-padding>
+              <!-- The "all" pool -->
+              <md-list-item class="md-2-line">
+                <div class="md-list-item-text">
+                  <h3>{{allpool.name}}</h3>
+                  <p>{{allpool.description}}</p>
+                  <md-checkbox class="md-secondary" ng-model="allpool.selected" ng-click="toggleAllTeams(allpool.selected)" aria-label="{{allpool.name}}"></md-checkbox>
+                </div>
+              </md-list-item>
+
+
+              <md-divider></md-divider>
+
+              <!-- The "all" pool -->
               <md-list-item ng-repeat="pool in pools" class="md-2-line">
                 <div class="md-list-item-text">
                   <h3>{{pool.name}}</h3>

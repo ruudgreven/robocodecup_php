@@ -24,6 +24,35 @@ Flight::route('GET /competition.json', function(){
 Flight::route('GET /pool.json', function(){
     global $oDbHelper;
 
+    $sQuery = "SELECT pool.id AS pool_id, pool.name AS pool_name, pool.description AS pool_description FROM pool WHERE pool.competition_id = " . COMPETITION_ID . ";";
+    $oResult = $oDbHelper->executeQuery($sQuery);
+
+    //Cluster by pool id
+    $aPools = array();
+    while($aObject = $oResult->fetch_assoc()) {
+        $sPoolId = $aObject['pool_id'];
+        if (!array_key_exists($sPoolId, $aPools)) {
+            $aPools[$sPoolId] = (object)[
+                'id' => $sPoolId,
+                'name' => $aObject['pool_name'],
+                'description' => $aObject['pool_description'],
+                'teams' => array()
+            ];
+        }
+        array_push($aPools[$sPoolId]->teams, $aObject);
+    }
+
+    //Return
+    $oDbHelper->outputArray(array_values($aPools));
+});
+
+
+/**
+ * Get all pools with teams
+ */
+Flight::route('GET /poolteams.json', function(){
+    global $oDbHelper;
+
     $sQuery = "SELECT team.id, pool.id AS pool_id, pool.name AS pool_name, pool.description AS pool_description, team.fullname, team.name, team.authorname, team.description, team.teamlogourl, team.teamlogourl_thumb FROM pool, team, poolteams WHERE pool.competition_id = team.competition_id = poolteams.competition_id = " . COMPETITION_ID . " AND pool.id = poolteams.pool_id AND team.id = poolteams.team_id;";
     $oResult = $oDbHelper->executeQuery($sQuery);
 
@@ -223,7 +252,7 @@ Flight::route('GET /round/@sRoundId/@sTeamId/battles.json', function($sRoundId, 
             'team_id' => $aObject['team_id'],
             'team_name' => $aObject['team_name'],
             'teamlogourl' => $aObject['teamlogourl'],
-            'teamlogourl_thumb' => $aObject['teamlogourl_thumb'],
+            'teamlogourl' => $aObject['team_name'],
             'totalscore' => $aObject['totalscore'],
             'totalscore' => $aObject['totalscore'],
             'totalpercentage' => $aObject['totalpercentage'],

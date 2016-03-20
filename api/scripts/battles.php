@@ -66,7 +66,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
     }
 
     //Loop through all the battles in the json file
-    echo "Loop through battles in the battleconfiguration...\n";
+    echo "Loop through battles in the runnedbattles file...\n";
     $dTimeZone = new DateTimeZone(TIMEZONE);
     foreach ($oJson as $sPoolname => $aBattles) {
         echo "  Pool '" . $sPoolname . "'...\n";
@@ -93,7 +93,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
 
                 echo "OK!\n";
                 //Read result file and add scores
-                parseFile($sPoolname, $iRound, $iBattleId, $sResultsFilename);
+                parseFile($sPoolname, $iBattleId, $sResultsFilename);
 
             } else {
                 throw new Exception("The filename '" . $sResultsFilename . "' cannot be found, but is mentioned in runnedbattles.json");
@@ -108,7 +108,7 @@ function addBattles($sFolder, $bOfficial, $iRound) {
 /**
  * Parse result file
  */
-function parseFile($sPoolId, $iRound, $iBattleId, $sFilename) {
+function parseFile($sPoolId, $iBattleId, $sFilename) {
     global $oDbHelper;
 
     echo "    Parsing " . $sFilename . "...\n";

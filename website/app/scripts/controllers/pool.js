@@ -11,6 +11,7 @@ angular.module('robocodecupApp')
   .controller('PoolCtrl', function ($scope, $http, $log, config, filter) {
     $scope.enabled = true;
     $scope.pools = [];
+    $scope.allpool;
 
     //Get the pools from the api
     $http({
@@ -21,19 +22,36 @@ angular.module('robocodecupApp')
 
       //Walk through pools
       pools.forEach(function(pool) {
-        $scope.pools.push({id: pool.id, name: pool.name, description: pool.description, selected: true, teams: pool.teams});
+        if (pool.id == "ALL") {
+          $scope.allpool = {id: pool.id, name: pool.name, description: pool.description, selected: true, teams: pool.teams};
+        } else {
+          $scope.pools.push({id: pool.id, name: pool.name, description: pool.description, selected: true, teams: pool.teams});
+        }
       });
       $scope.updateTeams();
     });
+
+    $scope.toggleAllTeams = function(toggle) {
+      $scope.pools.forEach(function(pool) {
+          pool.selected = toggle;
+      });
+      $scope.updateTeams();
+    }
 
     $scope.updateTeams = function() {
       //Create filterpools
       var filterpools = [];
 
+      if ($scope.allpool.selected) {
+        filterpools.push($scope.allpool.id);
+      }
+
       //Walk through all pools
       $scope.pools.forEach(function(pool) {
         if (pool.selected) {
           filterpools.push(pool.id);
+        } else {
+          $scope.allpool.selected = false;
         }
       });
 
