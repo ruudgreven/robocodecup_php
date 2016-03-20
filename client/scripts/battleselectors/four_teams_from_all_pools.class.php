@@ -121,8 +121,8 @@ class BattleSelector extends BaseBattleSelector {
             $aTeams = [$oBattle->teams[0]->teamfile, $oBattle->teams[1]->teamfile, $oBattle->teams[2]->teamfile, $oBattle->teams[3]->teamfile];
 
             //Build battle files based upon the templates
-            $this->generateBattleFile($sTemplateFilenameStart . "singleround.battle", $this->sOutputFolder . "/" . $oBattle->filename_battle_singleround, $aTeams);
-            $this->generateBattleFile($sTemplateFilenameStart . "tenrounds.battle", $this->sOutputFolder . "/" . $oBattle->filename_battle_tenrounds, $aTeams);
+            $this->generateBattleFile($sTemplateFilenameStart . "singleround_fourteams.battle", $this->sOutputFolder . "/" . $oBattle->filename_battle_singleround, $aTeams);
+            $this->generateBattleFile($sTemplateFilenameStart . "tenrounds_fourteams.battle", $this->sOutputFolder . "/" . $oBattle->filename_battle_tenrounds, $aTeams);
         }
     }
 }
