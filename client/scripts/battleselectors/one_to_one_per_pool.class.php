@@ -4,7 +4,7 @@ class BattleSelector extends BaseBattleSelector {
     private $sOutputFolder;
     private $aPoolBattles;
 
-    public function __construct($sOutputFolder) {
+    public function __construct($sOutputFolder, $aSelectorOptions) {
         $this->sOutputFolder = $sOutputFolder;
     }
 

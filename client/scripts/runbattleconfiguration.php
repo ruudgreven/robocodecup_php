@@ -9,11 +9,13 @@ include_once(dirname(__FILE__) . '/battleselectors/BaseBattleSelector.class.php'
 $sBattleconfigurationFilename = $argv[1];
 $sOutputFolder = $argv[2];
 $sSelector = $argv[3];
+$aSelectorOptions = array_slice($argv, 4);
 
 //Do some checks on the parameters
 if ($sBattleconfigurationFilename == "" || $sOutputFolder == "" || $sSelector == "") {
-    echo("Usage:   " . $argv[0] . " <battleconfiguration file> <tmp and outputfolder> <selector>\n");
+    echo("Usage:   " . $argv[0] . " <battleconfiguration file> <tmp and outputfolder> <selector> <selectoroptions>\n");
     echo("Example: " . $argv[0] . " <battleconfiguration file> ~/tmp battleselectors/one_to_one_per_pool.class.php\n");
+    echo("Example: " . $argv[0] . " <battleconfiguration file> ~/tmp battleselectors/four_teams_from_all_pools.class.php minbattlenum=8\n");
     exit;
 }
 
@@ -81,7 +83,7 @@ if ($hFileHandle = opendir($sJarFolder)) {
 
 //****** Run battle selector
 require_once(dirname(__FILE__) . "/" . $sSelector);
-$bs = new BattleSelector($sOutputFolder);
+$bs = new BattleSelector($sOutputFolder, $aSelectorOptions);
 
 //Generate battles
 $bs->generateBattles($aPools);

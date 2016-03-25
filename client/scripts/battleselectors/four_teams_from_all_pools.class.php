@@ -19,9 +19,21 @@ class BattleSelector extends BaseBattleSelector {
     private $iNumberOfBattlesPerTeam;
 
 
-    public function __construct($sOutputFolder) {
+    public function __construct($sOutputFolder, $aSelectorOptions) {
         $this->sOutputFolder = $sOutputFolder;
         $this->aBattlesToPlay = array();
+
+        if (sizeof($aSelectorOptions) == 0) {
+            die("Battleselector expects 1 argument: minbattlenum=<num>\n");
+        }
+        if (strpos($aSelectorOptions[0], "minbattlenum=") === FALSE) {
+            die("Battleselector expects 1 argument: minbattlenum=<num>\n");
+        }
+        $this->iNumberOfBattlesPerTeam = substr($aSelectorOptions[0], 13);
+
+        if (!is_numeric($this->iNumberOfBattlesPerTeam)) {
+            die("Argument for battleselector not ok, should be minbattlenum=<num>\n");
+        }
     }
 
     function generateBattles($aPools) {
@@ -35,46 +47,50 @@ class BattleSelector extends BaseBattleSelector {
             }
         }
 
-        //Shuffle teams
-        shuffle($aTeamCounts);
+        //Do while every team has played more than the mininum number of battles
 
-        //Walk through team
         do {
-            $aToPlay = array();
-            $aCounts = array();
-            //Pick the first four from the list and play a battle
-            for($i = 0; $i < 4; $i++ ) {
-                $aTeamCounts[$i]->iCount++;
-                array_push($aToPlay, $aTeamCounts[$i]);
-            }
+            //Shuffle teams
+            shuffle($aTeamCounts);
 
-            $aTeams = array();
-            foreach($aToPlay as $oCount) {
-                $sTeamfile = str_replace("/", ".", $oCount->oTeam->teamfile);
-                $sTeamfile = substr($sTeamfile, 0, -5);
+            //Walk through team
+            do {
+                $aToPlay = array();
+                $aCounts = array();
+                //Pick the first four from the list and play a battle
+                for($i = 0; $i < 4; $i++ ) {
+                    $aTeamCounts[$i]->iCount++;
+                    array_push($aToPlay, $aTeamCounts[$i]);
+                }
 
-                $oTeam = (object) [
-                    'id' => $oCount->oTeam->id,
-                    'teamfile' => $sTeamfile
+                $aTeams = array();
+                foreach($aToPlay as $oCount) {
+                    $sTeamfile = str_replace("/", ".", $oCount->oTeam->teamfile);
+                    $sTeamfile = substr($sTeamfile, 0, -5);
+
+                    $oTeam = (object) [
+                        'id' => $oCount->oTeam->id,
+                        'teamfile' => $sTeamfile
+                    ];
+
+                    array_push($aTeams, $oTeam);
+                }
+                $sFilenameStart = $sPoolname . "_" . $aTeams[0]->id . "-" . $aTeams[1]->id . "-" . $aTeams[2]->id . "-" . $aTeams[3]->id;
+
+                //Create battle
+                $oBattle = (object) [
+                    'teams' => $aTeams,
+                    'filename_battle_singleround' => "battles/" . $sFilenameStart . "_singleround.battle",
+                    'filename_battle_tenrounds' => "battles/" . $sFilenameStart . "_tenrounds.battle",
+                    'filename_results_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.results",
+                    'filename_replay_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.br",
                 ];
+                array_push($this->aBattlesToPlay, $oBattle);
 
-                array_push($aTeams, $oTeam);
-            }
-            $sFilenameStart = $sPoolname . "_" . $aTeams[0]->id . "-" . $aTeams[1]->id . "-" . $aTeams[2]->id . "-" . $aTeams[3]->id;
-
-            //Create battle
-            $oBattle = (object) [
-                'teams' => $aTeams,
-                'filename_battle_singleround' => "battles/" . $sFilenameStart . "_singleround.battle",
-                'filename_battle_tenrounds' => "battles/" . $sFilenameStart . "_tenrounds.battle",
-                'filename_results_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.results",
-                'filename_replay_tenrounds' => "output/" . $sFilenameStart . "_tenrounds.br",
-            ];
-            array_push($this->aBattlesToPlay, $oBattle);
-
-            //Sort the collections, less played battles first in the array
-            usort($aTeamCounts, array("Count", "compare"));
-        } while (!$this->equalCounts($aTeamCounts));
+                //Sort the collections, less played battles first in the array
+                usort($aTeamCounts, array("Count", "compare"));
+            } while (!$this->equalCounts($aTeamCounts));
+        } while ($aTeamCounts[0]->iCount < $this->iNumberOfBattlesPerTeam);
 
         //Set the number of battles played per team
         $this->iNumberOfBattlesPerTeam = $aTeamCounts[0]->iCount;
@@ -93,11 +109,11 @@ class BattleSelector extends BaseBattleSelector {
 
 
     function showBattles() {
-        echo "\nThere will be " . $this->iNumberOfBattlesPerTeam . " battles per team, which makes a total of " . sizeof($this->aBattlesToPlay) . "\n";
         echo "\nThe following battles will be played:\n";
         foreach ($this->aBattlesToPlay as $oBattle) {
             echo("     " . $oBattle->teams[0]->id . " - " . $oBattle->teams[1]->id . " - " . $oBattle->teams[2]->id . " - " . $oBattle->teams[3]->id . "\n");
         }
+        echo "\nThere will be " . $this->iNumberOfBattlesPerTeam . " battles per team, which makes a total of " . sizeof($this->aBattlesToPlay) . "\n";
     }
 
     function writeRunnedBattles() {
