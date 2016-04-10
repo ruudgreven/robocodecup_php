@@ -1,5 +1,38 @@
 # RobocodeCup API
 
+
+## Run the API with Docker
+Execute the following comment to build a docker image
+```
+docker build -t <imagename> . 
+```
+
+Example:
+```
+docker build -t ruudgreven/robocodecup_api .
+```
+
+After that run the following to start a container with the API:
+```
+docker run --name <name> -p 80:80 -v <Full path to full useb repo clone>:/useb -d <imagename>
+```
+
+Example:
+```
+docker run --name api -p 80:80 -v /Users/ruud/Storage/Prive/Development/Projects/RobocodeCup/:/useb -d ruudgreven/robocodecup_api
+```
+
+To execute a script (for adding a comptetion, messages, and so on)
+```
+docker exec -i -t <name> /useb/api/scripts/<script and options>
+```
+
+Example:
+```
+docker exec -i -t api /useb/api/scripts/messages.sh add
+```
+
+
 ## API Documentation
 
 ### GET /competition.json
